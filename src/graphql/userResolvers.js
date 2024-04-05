@@ -1,4 +1,5 @@
-import {User} from "../database/models/index.js" // uygun yolu sağlayın
+import {User} from "../database/models/index.js"
+import {hashPassword} from "../helpers/hashing.js"
 
 const userResolvers = {
   Query: {
@@ -7,7 +8,11 @@ const userResolvers = {
   },
   Mutation: {
     createUser: async (_, {username, email, password}) => {
-      const newUser = new User({username, email, password})
+      const newUser = new User({
+        username,
+        email,
+        password: hashPassword(password)
+      })
       return await newUser.save().select("-password")
     },
     updateUser: async (_, {id, email, password}) => {
