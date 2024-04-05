@@ -8,16 +8,19 @@ const userResolvers = {
   Mutation: {
     createUser: async (_, {username, email, password}) => {
       const newUser = new User({username, email, password})
-      return await newUser.save()
+      return await newUser.save().select("-password")
     },
     updateUser: async (_, {id, email, password}) => {
       const updates = {}
       if (email) updates.email = email
       if (password) updates.password = password
 
-      return await User.findByIdAndUpdate(id, updates, {new: true})
+      return await User.findByIdAndUpdate(id, updates, {new: true}).select(
+        "-password"
+      )
     },
-    deleteUser: async (_, {id}) => await User.findByIdAndDelete(id)
+    deleteUser: async (_, {id}) =>
+      await User.findByIdAndDelete(id).select("-password")
   }
 }
 
