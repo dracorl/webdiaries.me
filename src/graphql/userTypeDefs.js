@@ -10,6 +10,11 @@ const userTypeDefs = gql`
     updatedAt: String
   }
 
+  type Token {
+    accessToken: String
+    refreshToken: String
+  }
+
   type Query {
     users: [User]
     user(id: ID!): User
@@ -19,6 +24,8 @@ const userTypeDefs = gql`
     createUser(username: String!, email: String!, password: String!): User
     updateUser(id: ID!, username: String, email: String, password: String): User
     deleteUser(id: ID!): User
+    login(email: String!, password: String!): Token
+    refreshToken(token: String!): Token
   }
 `
 

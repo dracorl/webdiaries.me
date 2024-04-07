@@ -1,35 +1,25 @@
 import {ApolloServer} from "@apollo/server"
-import {expressMiddleware} from "@apollo/server/express4"
-import {ApolloServerPluginDrainHttpServer} from "@apollo/server/plugin/drainHttpServer"
-import express from "express"
-import http from "http"
-import cors from "cors"
-import morgan from "morgan"
-
+import {startStandaloneServer} from "@apollo/server/standalone"
+import {decodeToken} from "./helpers/jwt.js"
 import {typeDefs, resolvers} from "./graphql/index.js"
 import {mongoClient} from "./db.js"
 
-const app = express()
-
-const httpServer = http.createServer(app)
-
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({httpServer})]
+  resolvers
 })
-await server.start()
 
-app.use(
-  "/graphql",
-  cors(),
-  express.json(),
-  morgan(() => null, {skip: (req, res) => req.originalUrl === "/graphql"}),
-  expressMiddleware(server, {
-    context: async ({req}) => ({token: req.headers.token})
-  })
-)
+const {url} = await startStandaloneServer(server, {
+  context: async ({req, res}) => {
+    // Get the user token from the headers.
+    const token = req.headers.authorization || ""
 
-await new Promise(resolve => httpServer.listen({port: 4000}, resolve))
+    // Try to retrieve a user with the token
+    // const user = await getUser(token)
+    const user = decodeToken(token)
+    // Add the user to the context
+    return {user}
+  }
+})
 
-console.log(`🚀 Server ready at http://localhost:4000/graphql`)
+console.log(`🚀 Server listening at: ${url}`)
