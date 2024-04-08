@@ -10,6 +10,7 @@ const userResolvers = {
   },
   Mutation: {
     createUser: async (_, {username, email, password}) => {
+      console.log(username, email, password)
       const newUser = new User({
         username,
         email,

@@ -4,10 +4,7 @@ import {decodeToken} from "./helpers/jwt.js"
 import {typeDefs, resolvers} from "./graphql/index.js"
 import {mongoClient} from "./db.js"
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers
-})
+const server = new ApolloServer({typeDefs, resolvers})
 
 const {url} = await startStandaloneServer(server, {
   context: async ({req, res}) => {
