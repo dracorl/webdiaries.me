@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/dracorlll/webdiaries.me#readme",
   "devDependencies": {
-    "eslint": "^8.22.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.26.0",

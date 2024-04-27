@@ -16,6 +16,6 @@ module.exports = {
     'no-console': ['error', {allow: ['log', 'warn', 'error']}],
     'global-require': 'off',
     'consistent-return': 'off',
-    'allowVoid': true
+    'allow-void': true
   }
 }
