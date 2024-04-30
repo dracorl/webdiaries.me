@@ -1,10 +1,7 @@
-import Drawer from "../components/Drawer"
-import LoginModal from "../components/LoginModal"
 const HomePage = () => {
   return (
     <>
-      <Drawer />
-      <LoginModal />
+      <h1>Home Page</h1>
     </>
   )
 }

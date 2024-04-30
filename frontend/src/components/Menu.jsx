@@ -1,18 +1,19 @@
-import {FaPlus, FaList, FaChartBar, FaCog} from "react-icons/fa"
+import {FaPlus, FaList, FaChartBar, FaCog, FaSignInAlt} from "react-icons/fa"
+import {Link} from "react-router-dom"
 
 const Menu = () => {
   return (
     <>
-      <button className="btn btn-primary btn-block">
+      <Link to="/create" className="btn btn-primary btn-block">
         <FaPlus className="inline text-lg mb-1 mr-1" />
         Create New Post
-      </button>
+      </Link>
       <ul className="menu bg-base-200 w-56 rounded-box">
         <li>
-          <a>
+          <Link to="/posts">
             <FaList className="inline text-lg mb-1 mr-1" />
             Blogs Posts
-          </a>
+          </Link>
         </li>
         <li>
           <a>
@@ -28,7 +29,7 @@ const Menu = () => {
         </li>
         <li>
           <a>
-            <FaCog className="inline text-lg mb-1 mr-1" />
+            <FaSignInAlt className="inline text-lg mb-1 mr-1" />
             Logout
           </a>
         </li>

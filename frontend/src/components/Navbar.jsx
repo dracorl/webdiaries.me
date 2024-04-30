@@ -2,7 +2,7 @@ import reactLogo from "../assets/react.svg"
 import {useState} from "react"
 
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(false)
+  const [isLogged, setIsLogged] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   const toggleSidebar = () => {

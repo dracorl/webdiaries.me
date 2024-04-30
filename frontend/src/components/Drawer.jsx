@@ -1,7 +1,7 @@
 import Navbar from "./Navbar"
-import Hero from "./Hero"
 import Footer from "./Footer"
 import Menu from "./Menu"
+import {Outlet} from "react-router-dom"
 
 const Drawer = () => {
   return (
@@ -10,7 +10,7 @@ const Drawer = () => {
       <div className="drawer-content">
         {/* Page content here */}
         <Navbar />
-        <Hero />
+        <Outlet />
         <Footer />
       </div>
       <div className="drawer-side">
