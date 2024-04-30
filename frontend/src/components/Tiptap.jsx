@@ -5,6 +5,10 @@ import TextStyle from "@tiptap/extension-text-style"
 import {EditorProvider, useCurrentEditor} from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 
+const savePostAction = () => {
+  document.getElementById("savePostModal").showModal()
+}
+
 const MenuBar = () => {
   const {editor} = useCurrentEditor()
 
@@ -216,7 +220,10 @@ const MenuBar = () => {
       >
         purple
       </button>
-      <button className="m-0.5 btn btn-outline btn-primary btn-wide">
+      <button
+        onClick={savePostAction}
+        className="m-0.5 btn btn-outline btn-primary btn-wide"
+      >
         Save
       </button>
     </div>
