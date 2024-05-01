@@ -3,6 +3,7 @@ import {hashPassword, comparePasswords} from "../helpers/hashing.js"
 import {signToken, verifyToken, decodeToken} from "../helpers/jwt.js"
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../config/index.js"
 
+// TODO: Implement the Error class
 const userResolvers = {
   Query: {
     users: async () => await User.find().select("-password"),
@@ -11,12 +12,25 @@ const userResolvers = {
   Mutation: {
     createUser: async (_, {username, email, password}) => {
       console.log(username, email, password)
-      const newUser = new User({
+      const existingUsername = await User.findOne({username})
+      if (existingUsername) {
+        throw new Error(
+          "This username is already taken. Please try another one.",
+          "DUPLICATE_USERNAME"
+        )
+      }
+      const existingEmail = await User.findOne({email})
+      if (existingEmail) {
+        throw new Error(
+          "Email is already taken. Forgot your password? ",
+          "DUPLICATE_EMAIL"
+        )
+      }
+      return await User.create({
         username,
         email,
         password: await hashPassword(password)
-      })
-      return await newUser.save().select("-password")
+      }).select("-password")
     },
     updateUser: async (_, {id, email, password}) => {
       const updates = {}
@@ -33,8 +47,10 @@ const userResolvers = {
     // login with jwt
     login: async (_, {email, password}) => {
       const user = await User.findOne({email})
-      if (!comparePasswords(password, user.password)) return null
-      if (!user) return null
+      if (!user) throw new Error("User not found")
+      if (!(await comparePasswords(password, user.password)))
+        throw new Error("Password is incorrect")
+
       const accessToken = signToken(
         {userID: user.id, expiresIn: "10m"},
         ACCESS_TOKEN_SECRET
