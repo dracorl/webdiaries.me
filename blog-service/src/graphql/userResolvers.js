@@ -26,11 +26,13 @@ const userResolvers = {
           "DUPLICATE_EMAIL"
         )
       }
-      return await User.create({
+      const user = await User.create({
         username,
         email,
         password: await hashPassword(password)
-      }).select("-password")
+      })
+      user.password = undefined
+      return user
     },
     updateUser: async (_, {id, email, password}) => {
       const updates = {}

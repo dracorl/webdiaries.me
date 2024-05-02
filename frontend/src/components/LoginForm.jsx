@@ -63,7 +63,7 @@ function LoginForm() {
         </div>
         <div className="flex justify-evenly">
           <button type="button" className="btn btn-primary mr-2">
-            Sign Up
+            Forgot Password?
           </button>
           <button type="submit" className="btn btn-primary">
             Login

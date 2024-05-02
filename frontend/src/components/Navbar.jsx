@@ -9,8 +9,11 @@ const Navbar = () => {
     setIsSidebarOpen(!isSidebarOpen)
   }
 
-  const signInAction = () => {
+  const loginAction = () => {
     document.getElementById("loginModal").showModal()
+  }
+  const signUpAction = () => {
+    document.getElementById("signUpModal").showModal()
   }
   return (
     <div className="navbar bg-indigo-700 px-5 shadow-md">
@@ -53,9 +56,14 @@ const Navbar = () => {
           </div>
         )}
         {!isLogged && (
-          <a onClick={signInAction} className="btn btn-ghost text-xl">
-            Sign In
-          </a>
+          <>
+            <a onClick={signUpAction} className="btn btn-ghost text-xl">
+              Sign Up
+            </a>
+            <a onClick={loginAction} className="btn btn-ghost text-xl">
+              Login
+            </a>
+          </>
         )}
       </div>
     </div>
