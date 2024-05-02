@@ -1,6 +1,30 @@
 import TagSelector from "./TagSelector"
+import {useState, useEffect} from "react"
 
 const SavePostModal = () => {
+  const [selected, setSelected] = useState([])
+  const [title, setTitle] = useState("")
+  const [isChecked, setIsChecked] = useState(true)
+
+  useEffect(() => {
+    console.log("publish", isChecked)
+  }, [isChecked])
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked)
+  }
+
+  const handleTitleChange = e => {
+    setTitle(e.target.value)
+  }
+
+  const handleSave = () => {
+    console.log("Title:", title)
+    console.log("Publish:", isChecked)
+    console.log("Tags:", selected)
+    document.getElementById("savePostModal").close()
+  }
+
   return (
     <>
       {/* Open the modal using document.getElementById('ID').showModal() method */}
@@ -21,27 +45,38 @@ const SavePostModal = () => {
                   type="text"
                   className="grow"
                   placeholder="Be creative!"
+                  name="title"
+                  value={title}
+                  onChange={handleTitleChange}
                 />
               </label>
-              <TagSelector />
+              <TagSelector selected={selected} setSelected={setSelected} />
               <div className="join">
                 <input
                   className="join-item btn w-3/6"
                   type="radio"
                   name="options"
                   aria-label="Publish"
-                  checked
+                  onChange={handleCheck}
+                  checked={isChecked}
                 />
                 <input
                   className="join-item btn w-3/6"
                   type="radio"
                   name="options"
                   aria-label="Just save"
+                  checked={!isChecked}
+                  onChange={handleCheck}
                 />
               </div>
 
               <div className="flex justify-evenly">
-                <button className="btn btn-wide btn-primary mr-2">Save</button>
+                <button
+                  onClick={handleSave}
+                  className="btn btn-wide btn-primary mr-2"
+                >
+                  Save
+                </button>
               </div>
             </div>
           </div>

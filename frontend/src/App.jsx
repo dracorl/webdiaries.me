@@ -1,15 +1,17 @@
 import {
-  Route,
   createBrowserRouter,
   createRoutesFromElements,
+  Route,
   RouterProvider
 } from "react-router-dom"
 import MainLayout from "./layouts/MainLayout"
 import GuestLayout from "./layouts/GuestLayout"
 import HomePage from "./pages/HomePage"
-import NotFoundPage from "./pages/NotFoundPage"
-import PostsPage from "./pages/PostsPage"
 import CreateBlogPostPage from "./pages/CreateBlogPostPage"
+import PostsPage from "./pages/PostsPage"
+import NotFoundPage from "./pages/NotFoundPage"
+import ProtectedRoute from "./components/ProtectedRoute"
+
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,8 +24,22 @@ const App = () => {
             </GuestLayout>
           }
         />
-        <Route path="/create" element={<CreateBlogPostPage />} />
-        <Route path="/posts" element={<PostsPage />} />
+        <Route
+          path="/create"
+          element={
+            <ProtectedRoute>
+              <CreateBlogPostPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts"
+          element={
+            <ProtectedRoute>
+              <PostsPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
@@ -31,4 +47,5 @@ const App = () => {
 
   return <RouterProvider router={router} />
 }
+
 export default App
