@@ -17,6 +17,7 @@ const userTypeDefs = gql`
   type Query {
     users: [User]
     user(id: ID!): User
+    isTokenExpired(token: String!): Boolean
   }
 
   type Mutation {

@@ -7,7 +7,12 @@ import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../config/index.js"
 const userResolvers = {
   Query: {
     users: async () => await User.find().select("-password"),
-    user: async (_, {id}) => await User.findById(id).select("-password")
+    user: async (_, {id}) => await User.findById(id).select("-password"),
+    isTokenExpired: async (_, {token}) => {
+      const decodedToken = decodeToken(token)
+      if (!decodedToken) throw new Error("Invalid token")
+      return decodedToken.exp < Date.now() / 1000
+    }
   },
   Mutation: {
     createUser: async (_, {username, email, password}) => {
@@ -26,13 +31,11 @@ const userResolvers = {
           "DUPLICATE_EMAIL"
         )
       }
-      const user = await User.create({
+      return await User.create({
         username,
         email,
         password: await hashPassword(password)
       })
-      user.password = undefined
-      return user
     },
     updateUser: async (_, {id, email, password}) => {
       const updates = {}
