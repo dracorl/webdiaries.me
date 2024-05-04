@@ -2,17 +2,16 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App.jsx"
 import "./index.css"
-import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client"
-
-const client = new ApolloClient({
-  uri: "http://localhost:4000/graphql", // GraphQL sunucunuzun adresi
-  cache: new InMemoryCache()
-})
+import {ApolloProvider} from "@apollo/client"
+import {AuthProvider} from "./contexts/AuthContext"
+import client from "./utils/apollo"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ApolloProvider>
   </React.StrictMode>
 )

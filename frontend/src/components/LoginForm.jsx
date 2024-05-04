@@ -2,6 +2,8 @@ import {useState} from "react"
 import {FaAt, FaKey} from "react-icons/fa"
 import {useMutation, gql} from "@apollo/client"
 import {saveTokens} from "../utils/authUtils"
+import {useAuth} from "../contexts/AuthContext"
+import {useNavigate} from "react-router-dom"
 
 const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -12,21 +14,25 @@ const LOGIN_MUTATION = gql`
   }
 `
 
-function LoginForm() {
+const LoginForm = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const {login} = useAuth()
+  const navigate = useNavigate()
 
-  const [login] = useMutation(LOGIN_MUTATION)
+  const [loginMutation] = useMutation(LOGIN_MUTATION)
 
   const handleLogin = async e => {
     e.preventDefault()
     console.log("Logging in...", email, password)
     try {
-      const response = await login({variables: {email, password}})
+      const response = await loginMutation({variables: {email, password}})
       saveTokens(
         response.data.login.accessToken,
         response.data.login.refreshToken
       )
+      login()
+      navigate("/posts")
     } catch (error) {
       console.error(error)
     }

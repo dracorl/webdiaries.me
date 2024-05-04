@@ -1,9 +1,13 @@
 import reactLogo from "../assets/react.svg"
 import {useState} from "react"
+import {clearTokens} from "../utils/authUtils"
+import {useNavigate} from "react-router-dom"
+import {useAuth} from "../contexts/AuthContext"
 
 const Navbar = () => {
-  const [isLogged, setIsLogged] = useState(false)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const navigate = useNavigate()
+  const {loggedIn, logout} = useAuth()
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -15,6 +19,13 @@ const Navbar = () => {
   const signUpAction = () => {
     document.getElementById("signUpModal").showModal()
   }
+  const logoutAction = () => {
+    console.log("Logging out")
+    clearTokens()
+    logout()
+    navigate("/")
+  }
+
   return (
     <div className="navbar bg-indigo-700 px-5 shadow-md">
       <div className="flex-1">
@@ -23,12 +34,9 @@ const Navbar = () => {
         </a>
       </div>
       <div className="flex-none">
-        {isLogged && (
+        {loggedIn && (
           <div>
-            <a
-              onClick={() => setIsLogged(false)}
-              className="btn btn-ghost text-xl"
-            >
+            <a onClick={logoutAction} className="btn btn-ghost text-xl">
               Log Out
             </a>
             <label
@@ -55,7 +63,7 @@ const Navbar = () => {
             </label>
           </div>
         )}
-        {!isLogged && (
+        {!loggedIn && (
           <>
             <a onClick={signUpAction} className="btn btn-ghost text-xl">
               Sign Up
