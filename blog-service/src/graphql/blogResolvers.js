@@ -8,8 +8,9 @@ const blogResolvers = {
     tag: async (_, {id}) => await Tag.findById(id)
   },
   Mutation: {
-    createBlog: async (_, {title, content, author, tags}) => {
-      const newBlog = new Blog({title, content, author, tags})
+    createBlog: async (_, {title, content, tags}, {user}) => {
+      console.log("user", user)
+      const newBlog = new Blog({title, content, author: user.userID, tags})
       return await newBlog.save()
     },
     updateBlog: async (_, {id, title, content, tags}) => {
@@ -34,7 +35,8 @@ const blogResolvers = {
     }
   },
   Blog: {
-    author: async parent => {
+    author: async (parent, args, contextValue) => {
+      console.log(contextValue)
       return await User.findById(parent.author).select("-password")
     },
     tags: async parent => await Tag.find({_id: {$in: parent.tags}})

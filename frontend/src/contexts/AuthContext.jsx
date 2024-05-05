@@ -1,11 +1,16 @@
 // AuthContext.js
-import {createContext, useContext, useState} from "react"
+import {createContext, useContext, useState, useEffect} from "react"
+import {isLoggedIn} from "../utils/authUtils"
 
 const AuthContext = createContext()
 
 const useAuth = () => useContext(AuthContext)
 const AuthProvider = ({children}) => {
-  const [loggedIn, setLoggedIn] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(isLoggedIn())
+
+  useEffect(() => {
+    console.log("Logged in:", loggedIn)
+  }, [loggedIn])
 
   const login = () => {
     setLoggedIn(true)

@@ -1,7 +1,7 @@
 import {useCallback} from "react"
 import {ReactTags} from "react-tag-autocomplete"
 import "../autocomplete.css"
-import {useQuery, gql} from "@apollo/client"
+import {useQuery, useMutation, gql} from "@apollo/client"
 
 const TAGS_QUERY = gql`
   query Tags {
@@ -11,15 +11,34 @@ const TAGS_QUERY = gql`
     }
   }
 `
+
+const CRETAE_TAG_MUTATION = gql`
+  mutation Mutation($name: String!) {
+    createTag(name: $name) {
+      name
+      id
+    }
+  }
+`
 const TagSelector = ({selected, setSelected}) => {
   const {data} = useQuery(TAGS_QUERY)
+  const [createTag] = useMutation(CRETAE_TAG_MUTATION)
 
   const suggestions = data
     ? data.tags.map(tag => ({value: tag.id, label: tag.name}))
     : []
 
   const onAdd = useCallback(
-    newTag => {
+    async newTag => {
+      if (newTag.value === newTag.label) {
+        try {
+          const response = await createTag({variables: {name: newTag.label}})
+          newTag.value = response.data.createTag.id
+          newTag.label = response.data.createTag.name
+        } catch (error) {
+          console.error(error)
+        }
+      }
       setSelected([...selected, newTag])
     },
     [selected] // eslint-disable-line react-hooks/exhaustive-deps
@@ -41,6 +60,7 @@ const TagSelector = ({selected, setSelected}) => {
       allowNew={true}
       onDelete={onDelete}
       noOptionsText="No matching tags"
+      required
     />
   )
 }

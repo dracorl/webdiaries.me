@@ -276,7 +276,7 @@ display: none;
 </blockquote>
 `
 
-const Tiptap = () => {
+const Tiptap = ({setEditorContent}) => {
   return (
     <EditorProvider
       slotBefore={<MenuBar />}
@@ -288,6 +288,7 @@ const Tiptap = () => {
             "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
         }
       }}
+      onUpdate={({editor}) => setEditorContent(editor.getHTML())}
     ></EditorProvider>
   )
 }
