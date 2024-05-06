@@ -19,7 +19,7 @@ const blogTypeDefs = gql`
 
   type Query {
     blog(id: ID!): Blog
-    blogs: [Blog!]!
+    blogs(limit: Int!, offset: Int!): [Blog!]!
     tag(id: ID!): Tag
     tags: [Tag!]!
   }

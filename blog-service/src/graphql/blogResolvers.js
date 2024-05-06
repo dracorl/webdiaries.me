@@ -2,7 +2,8 @@ import {Blog, User, Tag} from "../database/models/index.js"
 
 const blogResolvers = {
   Query: {
-    blogs: async () => await Blog.find().populate("tags"),
+    blogs: async (_, {limit, offset}) =>
+      await Blog.find().skip(offset).limit(limit).populate("tags"),
     blog: async (_, {id}) => await Blog.findById(id).populate("tags"),
     tags: async () => await Tag.find(),
     tag: async (_, {id}) => await Tag.findById(id)
