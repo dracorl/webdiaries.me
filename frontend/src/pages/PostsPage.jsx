@@ -1,9 +1,9 @@
-import {Filtering} from "../components/DataTable"
+import DataTableWithPagination from "../components/DatatableWithPagination"
 
 const PostsPage = () => {
   return (
     <>
-      <Filtering />
+      <DataTableWithPagination />
     </>
   )
 }
