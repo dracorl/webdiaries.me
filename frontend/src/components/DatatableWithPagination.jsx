@@ -2,6 +2,7 @@ import {useState, useEffect, useCallback} from "react"
 import DataTable from "react-data-table-component"
 import {useLazyQuery, gql} from "@apollo/client"
 import DeleteModal from "../components/DeleteModal"
+import TagsModal from "./TagsModal"
 
 const BLOGS_QUERY = gql`
   query Blogs($limit: Int!, $offset: Int!) {
@@ -53,7 +54,15 @@ const DataTableWithPagination = () => {
       cell: row => (
         <div className="join join-vertical lg:join-horizontal">
           <button className="btn-xs btn join-item btn-primary">Edit</button>
-          <button className="btn-xs btn join-item btn-warning">Tags</button>
+          <button
+            onClick={() => {
+              setId(row.id)
+              document.getElementById("tagsModal").showModal()
+            }}
+            className="btn-xs btn join-item btn-warning"
+          >
+            Tags
+          </button>
           <button
             onClick={() => {
               setId(row.id)
@@ -117,6 +126,7 @@ const DataTableWithPagination = () => {
         onChangePage={handlePageChange}
       />
       <DeleteModal blogId={id} deleteAction={deleteAction} />
+      <TagsModal blogId={id} />
     </>
   )
 }

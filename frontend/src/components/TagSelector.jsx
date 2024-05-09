@@ -1,4 +1,4 @@
-import {useCallback} from "react"
+import {useCallback, useEffect} from "react"
 import {ReactTags} from "react-tag-autocomplete"
 import "../autocomplete.css"
 import {useQuery, useMutation, gql} from "@apollo/client"
@@ -23,6 +23,10 @@ const CRETAE_TAG_MUTATION = gql`
 const TagSelector = ({selected, setSelected}) => {
   const {data} = useQuery(TAGS_QUERY)
   const [createTag] = useMutation(CRETAE_TAG_MUTATION)
+
+  useEffect(() => {
+    console.log("selected: ", selected)
+  })
 
   const suggestions = data
     ? data.tags.map(tag => ({value: tag.id, label: tag.name}))
