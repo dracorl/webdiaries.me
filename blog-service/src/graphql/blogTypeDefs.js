@@ -11,6 +11,11 @@ const blogTypeDefs = gql`
     updatedAt: String!
   }
 
+  type BlogList {
+    totalCount: Int! # totalCount alanını ekledik
+    blog: [Blog!]!
+  }
+
   type Tag {
     id: ID!
     name: String!
@@ -19,7 +24,7 @@ const blogTypeDefs = gql`
 
   type Query {
     blog(id: ID!): Blog
-    blogs(limit: Int!, offset: Int!): [Blog!]!
+    blogs(limit: Int!, offset: Int!): BlogList!
     tag(id: ID!): Tag
     tags: [Tag!]!
   }

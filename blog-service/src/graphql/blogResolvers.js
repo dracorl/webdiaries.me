@@ -2,8 +2,21 @@ import {Blog, User, Tag} from "../database/models/index.js"
 
 const blogResolvers = {
   Query: {
-    blogs: async (_, {limit, offset}) =>
-      await Blog.find().skip(offset).limit(limit).populate("tags"),
+    blogs: async (_, {limit, offset}, {user}) => {
+      let query = {}
+
+      if (user && user.userID) {
+        const authorId = user.userID
+        query = {author: authorId}
+      }
+      const totalCount = await Blog.countDocuments(query)
+      const blog = await Blog.find(query)
+        .skip(offset)
+        .limit(limit)
+        .populate("tags")
+
+      return {totalCount, blog}
+    },
     blog: async (_, {id}) => await Blog.findById(id).populate("tags"),
     tags: async () => await Tag.find(),
     tag: async (_, {id}) => await Tag.findById(id)
@@ -37,7 +50,7 @@ const blogResolvers = {
   },
   Blog: {
     author: async (parent, args, contextValue) => {
-      console.log(contextValue)
+      // console.log(contextValue)
       return await User.findById(parent.author).select("-password")
     },
     tags: async parent => await Tag.find({_id: {$in: parent.tags}})
