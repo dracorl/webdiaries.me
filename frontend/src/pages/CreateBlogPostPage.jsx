@@ -4,9 +4,10 @@ import SavePostModal from "../components/SavePostModal"
 
 const CreateBlogPost = () => {
   const [editorContent, setEditorContent] = useState("")
+  const openModal = "savePostModal"
   return (
     <div className="mx-2 my-4 divide-y">
-      <Tiptap setEditorContent={setEditorContent} />
+      <Tiptap openModal={openModal} setEditorContent={setEditorContent} />
       <SavePostModal editorContent={editorContent} />
     </div>
   )

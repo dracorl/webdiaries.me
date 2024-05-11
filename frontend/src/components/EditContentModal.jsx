@@ -1,68 +1,78 @@
-import TagSelector from "./TagSelector"
-import {useState, useEffect} from "react"
 import {useMutation, gql} from "@apollo/client"
+import {useState} from "react"
 import {toast} from "react-toastify"
+import TagSelector from "./TagSelector"
 import {useNavigate} from "react-router-dom"
 
-const CRETAE_BLOG_MUTATION = gql`
-  mutation CreateBlog($title: String!, $content: String!, $tags: [ID]) {
-    createBlog(title: $title, content: $content, tags: $tags) {
+const UPDATE_BLOG = gql`
+  mutation UpdateBlog(
+    $updateBlogId: ID!
+    $title: String
+    $content: String
+    $tags: [ID]
+  ) {
+    updateBlog(
+      id: $updateBlogId
+      title: $title
+      content: $content
+      tags: $tags
+    ) {
       id
     }
   }
 `
 
-const SavePostModal = ({editorContent}) => {
-  const [selected, setSelected] = useState([])
-  const [title, setTitle] = useState("")
+const EditContentModal = ({
+  updateBlogId,
+  currentTitle,
+  currentTags,
+  editorContent
+}) => {
+  const [selected, setSelected] = useState(currentTags)
+  const [title, setTitle] = useState(currentTitle)
   const [isChecked, setIsChecked] = useState(true)
+  const [updateBlog] = useMutation(UPDATE_BLOG)
   const navigate = useNavigate()
-
-  const [createBlog] = useMutation(CRETAE_BLOG_MUTATION)
-
-  useEffect(() => {
-    console.log("publish", isChecked)
-  }, [isChecked])
-
-  const handleCheck = () => {
-    setIsChecked(!isChecked)
-  }
 
   const handleTitleChange = e => {
     setTitle(e.target.value)
   }
-
+  const handleCheck = () => {
+    setIsChecked(!isChecked)
+  }
   const handleSave = async e => {
     e.preventDefault()
+    console.log("Update Blog ID:", updateBlogId)
     console.log("Title:", title)
     console.log("Publish:", isChecked)
     console.log("Tags:", selected)
     console.log("Content:", editorContent)
     try {
-      await createBlog({
+      await updateBlog({
         variables: {
+          updateBlogId,
           title,
           content: editorContent,
           tags: selected.map(tag => tag.value)
         }
       })
-      toast.success("Blog post saved successfully")
+      toast.success("Blog post updated successfully")
       navigate("/posts")
     } catch (error) {
       console.error(error)
       toast.error(error.message)
     }
-    document.getElementById("savePostModal").close()
+    document.getElementById("editContentModal").close()
   }
-
   return (
     <>
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
-
-      <dialog id="savePostModal" className="modal modal-bottom sm:modal-middle">
+      <dialog
+        id="editContentModal"
+        className="modal modal-bottom sm:modal-middle"
+      >
         <div className="modal-box">
           <form method="dialog">
-            <h2 className="text-2xl text-center">Save Blog Post</h2>
+            <h2 className="text-2xl text-center">Update Blog Post</h2>
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
             </button>
@@ -118,4 +128,4 @@ const SavePostModal = ({editorContent}) => {
     </>
   )
 }
-export default SavePostModal
+export default EditContentModal

@@ -3,6 +3,9 @@ import DataTable from "react-data-table-component"
 import {useLazyQuery, gql} from "@apollo/client"
 import DeleteModal from "../components/DeleteModal"
 import TagsModal from "./TagsModal"
+import EditContentModal from "./EditContentModal"
+import Loading from "./Loading"
+import {useNavigate} from "react-router-dom"
 
 const BLOGS_QUERY = gql`
   query Blogs($limit: Int!, $offset: Int!) {
@@ -32,13 +35,13 @@ const DataTableWithPagination = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [id, setId] = useState("")
+  const navigate = useNavigate()
 
   const columns = [
     {
       name: "Title",
       selector: row => row.title,
-      sortable: true,
-      maxWidth: "20vw"
+      sortable: true
     },
     {
       name: "Updated At",
@@ -53,7 +56,12 @@ const DataTableWithPagination = () => {
     {
       cell: row => (
         <div className="join join-vertical lg:join-horizontal">
-          <button className="btn-xs btn join-item btn-primary">Edit</button>
+          <button
+            onClick={() => navigate(`/posts/${row.id}/edit`)}
+            className="btn-xs btn join-item btn-primary"
+          >
+            Edit
+          </button>
           <button
             onClick={() => {
               setId(row.id)
@@ -117,6 +125,7 @@ const DataTableWithPagination = () => {
         columns={columns}
         data={data}
         progressPending={loading}
+        progressComponent={<Loading />}
         pagination
         paginationServer
         paginationDefaultPage={currentPage}
@@ -125,6 +134,7 @@ const DataTableWithPagination = () => {
         onChangeRowsPerPage={handlePerRowsChange}
         onChangePage={handlePageChange}
       />
+      <EditContentModal blogId={id} />
       <DeleteModal blogId={id} deleteAction={deleteAction} />
       <TagsModal blogId={id} />
     </>

@@ -2,6 +2,7 @@ import {useQuery, useMutation, gql} from "@apollo/client"
 import {useEffect, useState} from "react"
 import {toast} from "react-toastify"
 import TagSelector from "./TagSelector"
+import Loading from "./Loading"
 
 const TAGS_QUERY = gql`
   query Blog($blogId: ID!) {
@@ -27,7 +28,7 @@ const TagsModal = ({blogId}) => {
   const {data, refetch: refetchTags} = useQuery(TAGS_QUERY, {
     variables: {blogId}
   })
-  const [updateBlog] = useMutation(UPDATE_TAGS_MUTATION)
+  const [updateBlog, {loading}] = useMutation(UPDATE_TAGS_MUTATION)
 
   const handleSave = async e => {
     e.preventDefault()
@@ -43,14 +44,15 @@ const TagsModal = ({blogId}) => {
     document.getElementById("tagsModal").close()
   }
   useEffect(() => {
-    console.log("tags: ", data?.blog?.tags)
-    console.log("blogId: ", blogId)
     const currentTags = data?.blog?.tags
       ? data?.blog?.tags.map(tag => ({value: tag.id, label: tag.name}))
       : []
     setSelected(currentTags)
   }, [data, blogId])
 
+  if (loading) {
+    return <Loading />
+  }
   return (
     <>
       <dialog id="tagsModal" className="modal modal-bottom sm:modal-middle">

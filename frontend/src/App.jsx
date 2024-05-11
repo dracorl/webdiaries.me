@@ -9,6 +9,7 @@ import GuestLayout from "./layouts/GuestLayout"
 import HomePage from "./pages/HomePage"
 import CreateBlogPostPage from "./pages/CreateBlogPostPage"
 import PostsPage from "./pages/PostsPage"
+import EditContentPage from "./pages/EditContentPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -37,6 +38,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <PostsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/posts/:blogId/edit"
+          element={
+            <ProtectedRoute>
+              <EditContentPage />
             </ProtectedRoute>
           }
         />

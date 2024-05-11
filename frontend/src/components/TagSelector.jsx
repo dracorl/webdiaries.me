@@ -24,10 +24,6 @@ const TagSelector = ({selected, setSelected}) => {
   const {data} = useQuery(TAGS_QUERY)
   const [createTag] = useMutation(CRETAE_TAG_MUTATION)
 
-  useEffect(() => {
-    console.log("selected: ", selected)
-  })
-
   const suggestions = data
     ? data.tags.map(tag => ({value: tag.id, label: tag.name}))
     : []
