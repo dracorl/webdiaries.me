@@ -1,4 +1,4 @@
-import SignUpForm from "./SignUpForm"
+import SignUpForm from "../forms/SignUpForm"
 
 const SignUpModal = () => {
   return (

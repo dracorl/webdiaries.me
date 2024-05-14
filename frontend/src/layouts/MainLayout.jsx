@@ -1,4 +1,4 @@
-import Drawer from "../components/Drawer"
+import Drawer from "../components/main/Drawer"
 import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 const MainLayout = () => {

@@ -1,7 +1,7 @@
 import {useMutation, gql} from "@apollo/client"
 import {useState} from "react"
 import {toast} from "react-toastify"
-import TagSelector from "./TagSelector"
+import TagSelector from "../TagSelector"
 import {useNavigate} from "react-router-dom"
 
 const UPDATE_BLOG = gql`

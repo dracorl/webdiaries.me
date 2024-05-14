@@ -1,8 +1,8 @@
 import {useState} from "react"
 import {FaAt, FaKey} from "react-icons/fa"
 import {useMutation, gql} from "@apollo/client"
-import {saveTokens} from "../utils/authUtils"
-import {useAuth} from "../contexts/AuthContext"
+import {saveTokens} from "../../utils/authUtils"
+import {useAuth} from "../../contexts/AuthContext"
 import {useNavigate} from "react-router-dom"
 
 const LOGIN_MUTATION = gql`

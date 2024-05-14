@@ -1,5 +1,5 @@
-import Typing from "./Typing"
-import heroImage from "../assets/hero-image.jpg"
+import Typing from "../Typing"
+import heroImage from "../../assets/hero-image.jpg"
 
 const Hero = () => {
   return (

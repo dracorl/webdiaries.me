@@ -1,8 +1,8 @@
-import reactLogo from "../assets/react.svg"
+import reactLogo from "../../assets/react.svg"
 import {useState} from "react"
-import {clearTokens} from "../utils/authUtils"
+import {clearTokens} from "../../utils/authUtils"
 import {useNavigate} from "react-router-dom"
-import {useAuth} from "../contexts/AuthContext"
+import {useAuth} from "../../contexts/AuthContext"
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)

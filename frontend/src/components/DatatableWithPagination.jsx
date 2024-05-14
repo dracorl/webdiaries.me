@@ -1,11 +1,11 @@
 import {useState, useEffect, useCallback} from "react"
 import DataTable from "react-data-table-component"
 import {useLazyQuery, gql} from "@apollo/client"
-import DeleteModal from "../components/DeleteModal"
-import TagsModal from "./TagsModal"
-import EditContentModal from "./EditContentModal"
-import Loading from "./Loading"
 import {useNavigate} from "react-router-dom"
+import EditContentModal from "./modals/EditContentModal"
+import DeleteModal from "./modals/DeleteModal"
+import TagsModal from "./modals/TagsModal"
+import Loading from "./main/Loading"
 
 const BLOGS_QUERY = gql`
   query Blogs($limit: Int!, $offset: Int!) {

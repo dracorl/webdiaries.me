@@ -1,8 +1,8 @@
 import {useQuery, useMutation, gql} from "@apollo/client"
 import {useEffect, useState} from "react"
 import {toast} from "react-toastify"
-import TagSelector from "./TagSelector"
-import Loading from "./Loading"
+import TagSelector from "../TagSelector"
+import Loading from "../main/Loading"
 
 const TAGS_QUERY = gql`
   query Blog($blogId: ID!) {

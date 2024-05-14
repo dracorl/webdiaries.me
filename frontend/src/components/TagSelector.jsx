@@ -1,4 +1,4 @@
-import {useCallback, useEffect} from "react"
+import {useCallback} from "react"
 import {ReactTags} from "react-tag-autocomplete"
 import "../autocomplete.css"
 import {useQuery, useMutation, gql} from "@apollo/client"

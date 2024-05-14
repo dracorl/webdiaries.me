@@ -1,9 +1,9 @@
 import {useQuery, gql} from "@apollo/client"
 import {useState} from "react"
-import Tiptap from "../components/Tiptap"
+import TipTap from "../components/TipTap"
 import {useParams} from "react-router-dom"
-import EditContentModal from "../components/EditContentModal"
-import Loading from "../components/Loading"
+import EditContentModal from "../components/modals/EditContentModal"
+import Loading from "../components/main/Loading"
 
 const CONTENT_QUERY = gql`
   query Blog($blogId: ID!) {
@@ -38,7 +38,7 @@ const EditContentPage = () => {
       : []
     return (
       <div className="mx-2 my-4 divide-y min-h-screen">
-        <Tiptap
+        <TipTap
           openModal={openModal}
           editorContent={data.blog.content}
           setEditorContent={setEditorContent}

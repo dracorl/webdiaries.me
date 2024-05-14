@@ -1,6 +1,6 @@
 // src/components/ProtectedRoute.jsx
 import {Navigate, Outlet} from "react-router-dom"
-import {isLoggedIn} from "../utils/authUtils"
+import {isLoggedIn} from "../../utils/authUtils"
 
 const ProtectedRoute = ({children}) => {
   const isAuthenticated = isLoggedIn()
