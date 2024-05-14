@@ -18,6 +18,10 @@ const blogSchema = new mongoose.Schema(
     tags: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Tag"
+    },
+    published: {
+      type: Boolean,
+      default: false
     }
   },
   {timestamps: true}

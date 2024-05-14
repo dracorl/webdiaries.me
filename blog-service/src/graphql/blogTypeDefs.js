@@ -7,6 +7,7 @@ const blogTypeDefs = gql`
     content: String!
     author: User
     tags: [Tag!]!
+    published: Boolean!
     createdAt: String!
     updatedAt: String!
   }

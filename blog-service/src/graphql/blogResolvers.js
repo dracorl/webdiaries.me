@@ -27,11 +27,12 @@ const blogResolvers = {
       const newBlog = new Blog({title, content, author: user.userID, tags})
       return await newBlog.save()
     },
-    updateBlog: async (_, {id, title, content, tags}) => {
+    updateBlog: async (_, {id, title, content, tags, published}) => {
       const updates = {}
       if (title) updates.title = title
       if (content) updates.content = content
       if (tags) updates.tags = tags
+      if (published) updates.published = published
 
       return await Blog.findByIdAndUpdate(id, updates, {new: true})
     },
