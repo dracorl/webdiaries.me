@@ -2,15 +2,23 @@ import {FaPlus, FaList, FaChartBar, FaCog, FaSignInAlt} from "react-icons/fa"
 import {Link} from "react-router-dom"
 
 const Menu = () => {
+  const drawerClose = () => {
+    document.getElementById("my-drawer").checked = false
+  }
+
   return (
     <>
-      <Link to="/create" className="btn btn-primary btn-block">
+      <Link
+        onClick={drawerClose}
+        to="/create"
+        className="btn btn-primary btn-block"
+      >
         <FaPlus className="inline text-lg mb-1 mr-1" />
         Create New Post
       </Link>
       <ul className="menu bg-base-200 w-56 rounded-box">
         <li>
-          <Link to="/posts">
+          <Link onClick={drawerClose} to="/posts">
             <FaList className="inline text-lg mb-1 mr-1" />
             Blogs Posts
           </Link>
