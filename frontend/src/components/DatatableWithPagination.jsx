@@ -5,6 +5,7 @@ import {useNavigate} from "react-router-dom"
 import EditContentModal from "./modals/EditContentModal"
 import DeleteModal from "./modals/DeleteModal"
 import TagsModal from "./modals/TagsModal"
+import PublishedModal from "./modals/PublishedModal"
 import Loading from "./main/Loading"
 
 const BLOGS_QUERY = gql`
@@ -13,6 +14,7 @@ const BLOGS_QUERY = gql`
       blog {
         id
         title
+        published
         updatedAt
         createdAt
       }
@@ -35,7 +37,19 @@ const DataTableWithPagination = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [id, setId] = useState("")
+  const [checkedStates, setCheckedStates] = useState({})
   const navigate = useNavigate()
+
+  useEffect(() => {
+    setCheckedStates(
+      data.reduce(
+        (states, blog) => ({...states, [blog.id]: blog.published}),
+        {}
+      )
+    )
+
+    console.log("Setting checked states...", checkedStates)
+  }, [data])
 
   const columns = [
     {
@@ -54,6 +68,29 @@ const DataTableWithPagination = () => {
       sortable: true
     },
     {
+      name: "Published",
+      cell: row => (
+        <input
+          type="checkbox"
+          className="toggle"
+          checked={checkedStates[row.id] || false}
+          onChange={e => {
+            setCheckedStates(prevStates => ({
+              ...prevStates,
+              [row.id]: e.target.checked
+            }))
+          }}
+          onClick={e => {
+            e.preventDefault()
+            setId(row.id)
+            console.log("Publishing...", id)
+            document.getElementById("publishedModal").showModal()
+          }}
+        />
+      )
+    },
+    {
+      name: "Actions",
       cell: row => (
         <div className="join join-vertical lg:join-horizontal">
           <button
@@ -87,7 +124,12 @@ const DataTableWithPagination = () => {
 
   const [blogs, {loading}] = useLazyQuery(BLOGS_QUERY, {
     onCompleted: data => {
+      let defaultCheckStates = {}
+      data.blogs.blog.forEach(blog => {
+        defaultCheckStates[blog.id] = blog.published
+      })
       setData(data.blogs.blog)
+      setCheckedStates(defaultCheckStates)
       setTotalRows(data.blogs.totalCount)
     },
     fetchPolicy: "network-only" // This ensures the query is always sent to the server
@@ -115,7 +157,7 @@ const DataTableWithPagination = () => {
   }
 
   useEffect(() => {
-    fetchBlogs() // fetch page 1 of users
+    fetchBlogs()
   }, [fetchBlogs])
 
   return (
@@ -137,6 +179,11 @@ const DataTableWithPagination = () => {
       <EditContentModal blogId={id} />
       <DeleteModal blogId={id} deleteAction={deleteAction} />
       <TagsModal blogId={id} />
+      <PublishedModal
+        blogId={id}
+        checkedStates={checkedStates}
+        setCheckedStates={setCheckedStates}
+      />
     </>
   )
 }

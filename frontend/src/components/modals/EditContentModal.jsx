@@ -10,11 +10,13 @@ const UPDATE_BLOG = gql`
     $title: String
     $content: String
     $tags: [ID]
+    $published: Boolean
   ) {
     updateBlog(
       id: $updateBlogId
       title: $title
       content: $content
+      published: $published
       tags: $tags
     ) {
       id
@@ -34,26 +36,16 @@ const EditContentModal = ({
   const [updateBlog] = useMutation(UPDATE_BLOG)
   const navigate = useNavigate()
 
-  const handleTitleChange = e => {
-    setTitle(e.target.value)
-  }
-  const handleCheck = () => {
-    setIsChecked(!isChecked)
-  }
   const handleSave = async e => {
     e.preventDefault()
-    console.log("Update Blog ID:", updateBlogId)
-    console.log("Title:", title)
-    console.log("Publish:", isChecked)
-    console.log("Tags:", selected)
-    console.log("Content:", editorContent)
     try {
       await updateBlog({
         variables: {
           updateBlogId,
           title,
           content: editorContent,
-          tags: selected.map(tag => tag.value)
+          tags: selected.map(tag => tag.value),
+          published: isChecked
         }
       })
       toast.success("Blog post updated successfully")
@@ -88,7 +80,7 @@ const EditContentModal = ({
                     placeholder="Be creative!"
                     name="title"
                     value={title}
-                    onChange={handleTitleChange}
+                    onChange={e => setTitle(e.target.value)}
                     required
                   />
                 </label>
@@ -99,7 +91,7 @@ const EditContentModal = ({
                     type="radio"
                     name="options"
                     aria-label="Publish"
-                    onChange={handleCheck}
+                    onChange={() => setIsChecked(!isChecked)}
                     checked={isChecked}
                   />
                   <input
@@ -108,7 +100,7 @@ const EditContentModal = ({
                     name="options"
                     aria-label="Just save"
                     checked={!isChecked}
-                    onChange={handleCheck}
+                    onChange={() => setIsChecked(!isChecked)}
                   />
                 </div>
 

@@ -13,7 +13,7 @@ const blogTypeDefs = gql`
   }
 
   type BlogList {
-    totalCount: Int! # totalCount alanını ekledik
+    totalCount: Int!
     blog: [Blog!]!
   }
 
@@ -31,8 +31,19 @@ const blogTypeDefs = gql`
   }
 
   type Mutation {
-    createBlog(title: String!, content: String!, tags: [ID]): Blog!
-    updateBlog(id: ID!, title: String, content: String, tags: [ID]): Blog!
+    createBlog(
+      title: String!
+      content: String!
+      tags: [ID]
+      published: Boolean
+    ): Blog!
+    updateBlog(
+      id: ID!
+      title: String
+      content: String
+      tags: [ID]
+      published: Boolean
+    ): Blog!
     deleteBlog(id: ID!): Boolean!
     createTag(name: String!): Tag!
     deleteTag(id: ID!): Boolean!

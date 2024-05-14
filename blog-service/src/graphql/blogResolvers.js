@@ -22,9 +22,15 @@ const blogResolvers = {
     tag: async (_, {id}) => await Tag.findById(id)
   },
   Mutation: {
-    createBlog: async (_, {title, content, tags}, {user}) => {
+    createBlog: async (_, {title, content, tags, published}, {user}) => {
       console.log("user", user)
-      const newBlog = new Blog({title, content, author: user.userID, tags})
+      const newBlog = new Blog({
+        title,
+        content,
+        author: user.userID,
+        tags,
+        published
+      })
       return await newBlog.save()
     },
     updateBlog: async (_, {id, title, content, tags, published}) => {
@@ -32,8 +38,7 @@ const blogResolvers = {
       if (title) updates.title = title
       if (content) updates.content = content
       if (tags) updates.tags = tags
-      if (published) updates.published = published
-
+      if (published !== undefined) updates.published = published
       return await Blog.findByIdAndUpdate(id, updates, {new: true})
     },
     deleteBlog: async (_, {id}) => {

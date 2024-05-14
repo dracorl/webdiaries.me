@@ -5,7 +5,12 @@ import {useNavigate} from "react-router-dom"
 import SavePostForm from "../forms/SavePostForm"
 
 const CRETAE_BLOG_MUTATION = gql`
-  mutation CreateBlog($title: String!, $content: String!, $tags: [ID]) {
+  mutation CreateBlog(
+    $title: String!
+    $content: String!
+    $tags: [ID]
+    $published: Boolean!
+  ) {
     createBlog(title: $title, content: $content, tags: $tags) {
       id
     }
@@ -27,7 +32,8 @@ const SavePostModal = ({editorContent}) => {
         variables: {
           title,
           content: editorContent,
-          tags: selected.map(tag => tag.value)
+          tags: selected.map(tag => tag.value),
+          published: isChecked
         }
       })
       toast.success("Blog post saved successfully")
