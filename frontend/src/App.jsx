@@ -6,7 +6,6 @@ import {
 } from "react-router-dom"
 import MainLayout from "./layouts/MainLayout"
 import GuestLayout from "./layouts/GuestLayout"
-import HomePage from "./pages/HomePage"
 import CreateBlogPostPage from "./pages/CreateBlogPostPage"
 import PostsPage from "./pages/PostsPage"
 import EditContentPage from "./pages/EditContentPage"
@@ -16,15 +15,8 @@ import ProtectedRoute from "./components/ProtectedRoute"
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<MainLayout />}>
-        <Route
-          index
-          element={
-            <GuestLayout>
-              <HomePage />
-            </GuestLayout>
-          }
-        />
+      <Route element={<MainLayout />}>
+        <Route index element={<GuestLayout></GuestLayout>} />
         <Route
           path="/create"
           element={
