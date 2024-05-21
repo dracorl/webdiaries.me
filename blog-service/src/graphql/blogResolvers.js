@@ -2,7 +2,7 @@ import {Blog, User, Tag} from "../database/models/index.js"
 
 const blogResolvers = {
   Query: {
-    blogs: async (_, {username, published, limit, offset}, {user}) => {
+    blogs: async (_, {username, tagId, published, limit, offset}, {user}) => {
       let query = {}
 
       if (user && user.userID) {
@@ -12,6 +12,8 @@ const blogResolvers = {
         const author = await User.findOne({username})
         if (!author) return {totalCount: 0, blog: []}
         query = {author: author._id, published}
+      } else if (tagId) {
+        query = {tags: {$in: [tagId]}, published}
       }
       const totalCount = await Blog.countDocuments(query)
       const blog = await Blog.find(query)
@@ -22,12 +24,22 @@ const blogResolvers = {
 
       return {totalCount, blog}
     },
-    blogsByTag: async (_, {id}) => {
-      const blogs = await Blog.find({tags: {$in: [id]}})
-        .populate("tags")
+    searchBlogs: async (_, {author, searchTerm, limit, offset}) => {
+      const query = {
+        published: true,
+        author,
+        $text: {$search: searchTerm}
+      }
+      console.log("query", query)
+      const totalCount = await Blog.countDocuments(query)
+      const blog = await Blog.find(query)
         .sort({createdAt: -1})
+        .skip(offset)
+        .limit(limit)
+        .populate("tags")
 
-      return blogs
+      console.log("blog", blog)
+      return {totalCount, blog}
     },
     blogsByUsername: async (_, {username}) => {
       const author = await User.findOne({username})

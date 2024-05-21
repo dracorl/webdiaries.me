@@ -27,6 +27,7 @@ const blogSchema = new mongoose.Schema(
   {timestamps: true}
 )
 
+blogSchema.index({title: "text", content: "text"})
 const Blog = mongoose.model("Blog", blogSchema)
 
 export default Blog

@@ -34,11 +34,17 @@ const blogTypeDefs = gql`
     blogs(
       username: String
       published: Boolean
+      tagId: ID
+      limit: Int!
+      offset: Int!
+    ): BlogList!
+    searchBlogs(
+      author: ID!
+      searchTerm: String!
       limit: Int!
       offset: Int!
     ): BlogList!
     blogsByUsername(username: String!): [Blog!]!
-    blogsByTag(tagId: ID!): [Blog!]!
     tag(id: ID!): Tag
     tags: [Tag!]!
     tagsCount(username: String!): [TagsCount!]!
