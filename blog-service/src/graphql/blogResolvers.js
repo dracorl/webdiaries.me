@@ -12,8 +12,7 @@ const blogResolvers = {
         const author = await User.findOne({username})
         if (!author) return {totalCount: 0, blog: []}
         query = {author: author._id, published}
-      } else if (tagId) {
-        query = {tags: {$in: [tagId]}, published}
+        if (tagId) query.tags = {$in: [tagId]}
       }
       const totalCount = await Blog.countDocuments(query)
       const blog = await Blog.find(query)
@@ -30,7 +29,6 @@ const blogResolvers = {
         author,
         $text: {$search: searchTerm}
       }
-      console.log("query", query)
       const totalCount = await Blog.countDocuments(query)
       const blog = await Blog.find(query)
         .sort({createdAt: -1})
@@ -38,7 +36,6 @@ const blogResolvers = {
         .limit(limit)
         .populate("tags")
 
-      console.log("blog", blog)
       return {totalCount, blog}
     },
     blogsByUsername: async (_, {username}) => {

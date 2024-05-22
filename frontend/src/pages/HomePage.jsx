@@ -18,6 +18,7 @@ const HomePage = () => {
           <div className="md:col-span-7 bg-white p-1">
             <Routes>
               <Route path="/" element={<BlogScroll />} />
+              <Route path="tag/:id" element={<BlogScroll />} />
               <Route path="blog/:id" element={<BlogView />} />
             </Routes>
           </div>

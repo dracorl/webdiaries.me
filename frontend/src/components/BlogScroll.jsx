@@ -1,19 +1,23 @@
 import Loading from "./Loading"
 import {useEffect, useCallback, useState} from "react"
 import {useQuery, gql} from "@apollo/client"
-import {Link, useLocation} from "react-router-dom"
+import {Link} from "react-router-dom"
+import {useParams, useNavigate} from "react-router-dom"
+import {FaArrowLeft} from "react-icons/fa"
 
 const GET_BLOGS = gql`
   query Blogs(
     $limit: Int!
     $offset: Int!
     $username: String
+    $tagId: ID
     $published: Boolean
   ) {
     blogs(
       limit: $limit
       offset: $offset
       username: $username
+      tagId: $tagId
       published: $published
     ) {
       blog {
@@ -31,45 +35,44 @@ const GET_BLOGS = gql`
 `
 
 const BlogScroll = () => {
+  const {id} = useParams()
+  const navigate = useNavigate()
+
+  const [hasMore, setHasMore] = useState(true)
+  const [isFetchingMore, setIsFetchingMore] = useState(false)
   const {data, loading, fetchMore} = useQuery(GET_BLOGS, {
-    variables: {offset: 0, limit: 10, username: "enginyuksel", published: true}
+    variables: {
+      offset: 0,
+      limit: 10,
+      username: "enginyuksel",
+      tagId: id ? id : null,
+      published: true
+    }
   })
 
-  const [isFetchingMore, setIsFetchingMore] = useState(false)
-  const {pathname} = useLocation()
-
-  useEffect(() => {
-    // Scroll position is restored only when navigating back to the blog list
-    if (pathname === "/") {
-      const savedScrollPosition = sessionStorage.getItem("scrollPosition")
-      if (savedScrollPosition) {
-        window.scrollTo(0, parseInt(savedScrollPosition, 10))
-      }
-    }
-  }, [pathname])
-
-  const handleClick = () => {
-    // Save the current scroll position when a blog is clicked
-    console.log("Saving scroll position", window.scrollY)
-    sessionStorage.setItem("scrollPosition", window.scrollY.toString())
-  }
   const handleScroll = useCallback(() => {
     if (
-      window.innerHeight + document.documentElement.scrollTop >=
+      Math.round(window.innerHeight + document.documentElement.scrollTop) >=
         document.documentElement.offsetHeight - 50 &&
-      !isFetchingMore
+      !isFetchingMore &&
+      hasMore
     ) {
+      console.log("Fetching more blogs...")
       setIsFetchingMore(true)
       fetchMore({
         variables: {
           offset: data.blogs.blog.length,
           limit: 10,
           username: "enginyuksel",
+          tagId: id ? id : null,
           published: true
         },
         updateQuery: (prev, {fetchMoreResult}) => {
           setIsFetchingMore(false)
-          if (!fetchMoreResult) return prev
+          if (!fetchMoreResult || fetchMoreResult.blogs.blog.length < 10) {
+            setHasMore(false)
+            return prev
+          }
           return {
             ...prev,
             blogs: {
@@ -80,7 +83,7 @@ const BlogScroll = () => {
         }
       })
     }
-  }, [data, fetchMore, isFetchingMore])
+  }, [data, fetchMore, isFetchingMore, id, hasMore])
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -91,6 +94,15 @@ const BlogScroll = () => {
 
   return (
     <>
+      {window.history.length > 2 && id && (
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center -ml-4 pb-4 mt-4"
+        >
+          <FaArrowLeft size={25} />
+          <div className="ml-2 text-2xl font-bold">Back</div>
+        </button>
+      )}
       {data.blogs.blog.map(blog => (
         <div className="p-3 mb-9 border-x-2 shadow-md" key={blog.id}>
           <div className="flex flex-col">
@@ -114,25 +126,23 @@ const BlogScroll = () => {
             />
             <div className="mt-5 self-end">
               <Link to={`/blog/${blog.id}`}>
-                <button
-                  onClick={handleClick}
-                  className="btn btn-outline btn-xs"
-                >
-                  Read more
-                </button>
+                <button className="btn btn-outline btn-xs">Read more</button>
               </Link>
             </div>
             <div className="mt-5">
               {blog.tags.map(tag => (
-                <button key={tag.id} className="mr-px btn btn-outline btn-xs">
-                  {tag.name}
-                </button>
+                <Link key={tag.id + blog.id} to={`/tag/${tag.id}`}>
+                  <button className="mr-px btn btn-outline btn-xs">
+                    {tag.name}
+                  </button>
+                </Link>
               ))}
             </div>
           </div>
         </div>
       ))}
-      {isFetchingMore && <Loading />}
+      {isFetchingMore && hasMore && <Loading />}
+      {!hasMore && <div className="text-center">No more blogs to show.</div>}
     </>
   )
 }
