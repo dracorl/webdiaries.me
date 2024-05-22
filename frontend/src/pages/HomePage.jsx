@@ -4,6 +4,7 @@ import BlogScroll from "../components/BlogScroll"
 import Tags from "../components/Tags"
 import BlogView from "../components/BlogView"
 import Navbar from "../components/Navbar"
+import SearchView from "../components/SearchView"
 
 const HomePage = () => {
   return (
@@ -20,6 +21,7 @@ const HomePage = () => {
               <Route path="/" element={<BlogScroll />} />
               <Route path="tag/:id" element={<BlogScroll />} />
               <Route path="blog/:id" element={<BlogView />} />
+              <Route path="search/" element={<SearchView />} />
             </Routes>
           </div>
 
