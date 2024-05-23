@@ -1,4 +1,5 @@
 import {useQuery, gql} from "@apollo/client"
+import {Link} from "react-router-dom"
 import Loading from "./Loading"
 
 const BLOGS_QUERY = gql`
@@ -63,7 +64,9 @@ const renderBlogs = blogs => {
                           <ul>
                             {monthData.blog.map((blog, index) => (
                               <li key={index}>
-                                <a>{blog.title.slice(0, 20)}</a>
+                                <Link to={`/blog/${blog.id}`}>
+                                  {blog.title.slice(0, 20)}
+                                </Link>
                               </li>
                             ))}
                           </ul>

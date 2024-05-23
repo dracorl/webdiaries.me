@@ -1,6 +1,6 @@
 import Loading from "./Loading"
 import {useEffect, useCallback, useState} from "react"
-import {useQuery, gql} from "@apollo/client"
+import {useQuery, gql, NetworkStatus} from "@apollo/client"
 import {Link} from "react-router-dom"
 import {useParams, useNavigate} from "react-router-dom"
 import {FaArrowLeft} from "react-icons/fa"
@@ -37,17 +37,19 @@ const GET_BLOGS = gql`
 const BlogScroll = () => {
   const {id} = useParams()
   const navigate = useNavigate()
+  const [fetchCount, setFetchCount] = useState(0)
 
   const [hasMore, setHasMore] = useState(true)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
-  const {data, loading, fetchMore} = useQuery(GET_BLOGS, {
+  const {data, loading, fetchMore, networkStatus} = useQuery(GET_BLOGS, {
     variables: {
       offset: 0,
       limit: 10,
       username: "enginyuksel",
       tagId: id ? id : null,
       published: true
-    }
+    },
+    notifyOnNetworkStatusChange: true
   })
 
   const handleScroll = useCallback(() => {
@@ -55,9 +57,11 @@ const BlogScroll = () => {
       Math.round(window.innerHeight + document.documentElement.scrollTop) >=
         document.documentElement.offsetHeight - 50 &&
       !isFetchingMore &&
+      networkStatus !== NetworkStatus.fetchMore &&
       hasMore
     ) {
-      console.log("Fetching more blogs...")
+      setFetchCount(fetchCount + 1)
+      console.log("Fetching more blogs... ", fetchCount)
       setIsFetchingMore(true)
       fetchMore({
         variables: {
@@ -73,6 +77,13 @@ const BlogScroll = () => {
             setHasMore(false)
             return prev
           }
+          console.log({
+            ...prev,
+            blogs: {
+              ...prev.blogs,
+              blog: [...prev.blogs.blog, ...fetchMoreResult.blogs.blog]
+            }
+          })
           return {
             ...prev,
             blogs: {
@@ -83,8 +94,7 @@ const BlogScroll = () => {
         }
       })
     }
-  }, [data, fetchMore, isFetchingMore, id, hasMore])
-
+  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore, fetchCount])
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
