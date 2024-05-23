@@ -6,8 +6,11 @@ import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../config/index.js"
 // TODO: Implement the Error class
 const userResolvers = {
   Query: {
-    users: async () => await User.find().select("-password"),
-    user: async (_, {id}) => await User.findById(id).select("-password"),
+    users: async () => User.find().select("-password"),
+    user: async (_, {id, username}) => {
+      if (id) return User.findById(id).select("-password")
+      if (username) return User.findOne({username}).select("-password")
+    },
     isTokenExpired: async (_, {token}) => {
       const decodedToken = decodeToken(token)
       if (!decodedToken) throw new Error("Invalid token")

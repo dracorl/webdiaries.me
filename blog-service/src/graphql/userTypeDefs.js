@@ -16,7 +16,7 @@ const userTypeDefs = gql`
 
   type Query {
     users: [User]
-    user(id: ID!): User
+    user(id: ID, username: String): User
     isTokenExpired(token: String!): Boolean
   }
 
