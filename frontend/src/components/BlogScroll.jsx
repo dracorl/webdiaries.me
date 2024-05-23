@@ -37,8 +37,6 @@ const GET_BLOGS = gql`
 const BlogScroll = () => {
   const {id} = useParams()
   const navigate = useNavigate()
-  const [fetchCount, setFetchCount] = useState(0)
-
   const [hasMore, setHasMore] = useState(true)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
   const {data, loading, fetchMore, networkStatus} = useQuery(GET_BLOGS, {
@@ -60,8 +58,7 @@ const BlogScroll = () => {
       networkStatus !== NetworkStatus.fetchMore &&
       hasMore
     ) {
-      setFetchCount(fetchCount + 1)
-      console.log("Fetching more blogs... ", fetchCount)
+      console.log("Fetching more blogs... ")
       setIsFetchingMore(true)
       fetchMore({
         variables: {
@@ -77,13 +74,6 @@ const BlogScroll = () => {
             setHasMore(false)
             return prev
           }
-          console.log({
-            ...prev,
-            blogs: {
-              ...prev.blogs,
-              blog: [...prev.blogs.blog, ...fetchMoreResult.blogs.blog]
-            }
-          })
           return {
             ...prev,
             blogs: {
@@ -94,7 +84,7 @@ const BlogScroll = () => {
         }
       })
     }
-  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore, fetchCount])
+  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore])
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
