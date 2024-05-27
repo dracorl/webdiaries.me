@@ -1,10 +1,11 @@
 import Loading from "./Loading"
 import {useQuery, gql} from "@apollo/client"
 import {Link} from "react-router-dom"
+import {useDomain} from "../contexts/DomainContext"
 
 const TAGS_COUNT = gql`
-  query TagsCount($username: String!) {
-    tagsCount(username: $username) {
+  query TagsCount($author: ID!) {
+    tagsCount(author: $author) {
       id
       name
       count
@@ -13,11 +14,12 @@ const TAGS_COUNT = gql`
 `
 
 const Tags = () => {
+  const domainId = useDomain()
+  console.log("domainId:", domainId)
   const {data, loading} = useQuery(TAGS_COUNT, {
-    variables: {username: "enginyuksel"}
+    variables: {author: domainId}
   })
-
-  if (loading) return <Loading />
+  if (loading || !domainId) return <Loading />
 
   return (
     <div className="grid-flow-row-dense">

@@ -10,14 +10,14 @@ const GET_BLOGS = gql`
   query Blogs(
     $limit: Int!
     $offset: Int!
-    $username: String
+    $author: ID
     $tagId: ID
     $published: Boolean
   ) {
     blogs(
       limit: $limit
       offset: $offset
-      username: $username
+      author: $author
       tagId: $tagId
       published: $published
     ) {
@@ -45,7 +45,7 @@ const BlogScroll = () => {
     variables: {
       offset: 0,
       limit: 10,
-      username: "enginyuksel",
+      author: domainId,
       tagId: id ? id : null,
       published: true
     },
@@ -60,7 +60,6 @@ const BlogScroll = () => {
       networkStatus !== NetworkStatus.fetchMore &&
       hasMore
     ) {
-      console.log("Fetching more blogs... ", domainId)
       setIsFetchingMore(true)
       fetchMore({
         variables: {
@@ -92,7 +91,7 @@ const BlogScroll = () => {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [handleScroll])
 
-  if (loading) return <Loading />
+  if (loading || !domainId) return <Loading />
 
   return (
     <>

@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import {Blog, User, Tag} from "../database/models/index.js"
 
 const blogResolvers = {
@@ -10,7 +11,6 @@ const blogResolvers = {
         query = {author: authorId}
       } else if (author) query = {author, published}
       if (tagId) query.tags = {$in: [tagId]}
-
       const totalCount = await Blog.countDocuments(query)
       const blog = await Blog.find(query)
         .sort({createdAt: -1})
@@ -40,7 +40,12 @@ const blogResolvers = {
     tag: async (_, {id}) => Tag.findById(id),
     tagsCount: async (_, {author}) => {
       const tagCounts = await Blog.aggregate([
-        {$match: {published: true, author}},
+        {
+          $match: {
+            published: true,
+            author: mongoose.Types.ObjectId.createFromHexString(author)
+          }
+        },
         // Unwind the tags array to deconstruct the array into documents
         {$unwind: "$tags"},
         // Group by the tag and count the occurrences

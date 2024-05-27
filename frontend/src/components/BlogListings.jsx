@@ -1,20 +1,29 @@
 import {useQuery, gql} from "@apollo/client"
 import {Link} from "react-router-dom"
+import {useDomain} from "../contexts/DomainContext"
 import Loading from "./Loading"
 
 const BLOGS_QUERY = gql`
-  query BlogsByUsername($username: String!) {
-    blogsByUsername(username: $username) {
-      createdAt
-      title
-      id
+  query Blogs($limit: Int!, $offset: Int!, $author: ID, $published: Boolean) {
+    blogs(
+      limit: $limit
+      offset: $offset
+      author: $author
+      published: $published
+    ) {
+      blog {
+        id
+        createdAt
+        title
+      }
+      totalCount
     }
   }
 `
 const listBlogs = data => {
-  const blogs = data
+  const blogs = data.blogs.blog
 
-  const structuredData = {blogs: {}, totalCount: blogs.length}
+  const structuredData = {blogs: {}, totalCount: data.blogs.totalCount}
 
   blogs.forEach(blog => {
     const date = new Date(Number(blog.createdAt))
@@ -83,16 +92,18 @@ const renderBlogs = blogs => {
 }
 
 const BlogListings = () => {
-  const {data} = useQuery(BLOGS_QUERY, {
+  const domainId = useDomain()
+  const {data, loading} = useQuery(BLOGS_QUERY, {
     variables: {
-      username: "enginyuksel"
+      limit: 0,
+      offset: 0,
+      published: true,
+      author: domainId
     }
   })
 
-  if (!data) {
-    return <Loading />
-  }
+  if (loading || !domainId) return <Loading />
 
-  return <>{renderBlogs(listBlogs(data.blogsByUsername).blogs)}</>
+  return <>{renderBlogs(listBlogs(data).blogs)}</>
 }
 export default BlogListings
