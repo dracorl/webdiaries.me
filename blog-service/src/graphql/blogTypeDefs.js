@@ -32,7 +32,7 @@ const blogTypeDefs = gql`
   type Query {
     blog(id: ID!): Blog
     blogs(
-      username: String
+      author: ID
       published: Boolean
       tagId: ID
       limit: Int!
@@ -47,7 +47,7 @@ const blogTypeDefs = gql`
     blogsByUsername(username: String!): [Blog!]!
     tag(id: ID!): Tag
     tags: [Tag!]!
-    tagsCount(username: String!): [TagsCount!]!
+    tagsCount(author: ID!): [TagsCount!]!
   }
 
   type Mutation {
