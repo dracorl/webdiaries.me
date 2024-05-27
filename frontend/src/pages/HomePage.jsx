@@ -5,6 +5,7 @@ import Tags from "../components/Tags"
 import BlogView from "../components/BlogView"
 import Navbar from "../components/Navbar"
 import SearchView from "../components/SearchView"
+import NotFound from "../components/NotFound"
 
 const HomePage = () => {
   return (
@@ -22,6 +23,7 @@ const HomePage = () => {
               <Route path="tag/:id" element={<BlogScroll />} />
               <Route path="blog/:id" element={<BlogView />} />
               <Route path="search/" element={<SearchView />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
 

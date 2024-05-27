@@ -15,7 +15,6 @@ const TAGS_COUNT = gql`
 
 const Tags = () => {
   const domainId = useDomain()
-  console.log("domainId:", domainId)
   const {data, loading} = useQuery(TAGS_COUNT, {
     variables: {author: domainId}
   })

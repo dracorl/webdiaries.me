@@ -97,6 +97,19 @@ const SearchView = () => {
   }, [handleScroll])
 
   if (loading) return <Loading />
+  if (!data.searchBlogs.blog.length)
+    return (
+      <>
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center -ml-4 pb-4 mt-4"
+        >
+          <FaArrowLeft size={25} />
+          <div className="ml-2 text-2xl font-bold">Back</div>
+        </button>
+        <div className="text-center">No blogs found.</div>
+      </>
+    )
 
   return (
     <>

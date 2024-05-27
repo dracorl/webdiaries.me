@@ -44,7 +44,6 @@ const blogTypeDefs = gql`
       limit: Int!
       offset: Int!
     ): BlogList!
-    blogsByUsername(username: String!): [Blog!]!
     tag(id: ID!): Tag
     tags: [Tag!]!
     tagsCount(author: ID!): [TagsCount!]!
