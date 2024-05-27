@@ -4,6 +4,7 @@ import {useQuery, gql, NetworkStatus} from "@apollo/client"
 import {Link} from "react-router-dom"
 import {useParams, useNavigate} from "react-router-dom"
 import {FaArrowLeft} from "react-icons/fa"
+import {useDomain} from "../contexts/DomainContext"
 
 const GET_BLOGS = gql`
   query Blogs(
@@ -35,6 +36,7 @@ const GET_BLOGS = gql`
 `
 
 const BlogScroll = () => {
+  const domainId = useDomain()
   const {id} = useParams()
   const navigate = useNavigate()
   const [hasMore, setHasMore] = useState(true)
@@ -58,7 +60,7 @@ const BlogScroll = () => {
       networkStatus !== NetworkStatus.fetchMore &&
       hasMore
     ) {
-      console.log("Fetching more blogs... ")
+      console.log("Fetching more blogs... ", domainId)
       setIsFetchingMore(true)
       fetchMore({
         variables: {
