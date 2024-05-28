@@ -2,9 +2,9 @@ import Loading from "./Loading"
 import {useEffect, useCallback, useState} from "react"
 import {useQuery, gql, NetworkStatus} from "@apollo/client"
 import {Link} from "react-router-dom"
-import {useParams, useNavigate} from "react-router-dom"
-import {FaArrowLeft} from "react-icons/fa"
+import {useParams} from "react-router-dom"
 import {useDomain} from "../contexts/DomainContext"
+import BackButton from "./BackButton"
 
 const GET_BLOGS = gql`
   query Blogs(
@@ -38,7 +38,6 @@ const GET_BLOGS = gql`
 const BlogScroll = () => {
   const domainId = useDomain()
   const {id} = useParams()
-  const navigate = useNavigate()
   const [hasMore, setHasMore] = useState(true)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
   const {data, loading, fetchMore, networkStatus} = useQuery(GET_BLOGS, {
@@ -95,15 +94,7 @@ const BlogScroll = () => {
 
   return (
     <>
-      {window.history.length > 2 && id && (
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center -ml-4 pb-4 mt-4"
-        >
-          <FaArrowLeft size={25} />
-          <div className="ml-2 text-2xl font-bold">Back</div>
-        </button>
-      )}
+      {window.history.length > 2 && id && <BackButton />}
       {data.blogs.blog.map(blog => (
         <div className="p-3 mb-9 border-x-2 shadow-md" key={blog.id}>
           <div className="flex flex-col">

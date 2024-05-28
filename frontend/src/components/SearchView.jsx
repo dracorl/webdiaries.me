@@ -1,8 +1,8 @@
 import Loading from "./Loading"
 import {useEffect, useCallback, useState} from "react"
 import {useQuery, gql} from "@apollo/client"
-import {Link, useNavigate, useSearchParams} from "react-router-dom"
-import {FaArrowLeft} from "react-icons/fa"
+import {Link, useSearchParams} from "react-router-dom"
+import BackButton from "./BackButton"
 
 const SEARCH_BLOGS = gql`
   query SearchBlogs(
@@ -33,7 +33,6 @@ const SEARCH_BLOGS = gql`
 `
 
 const SearchView = () => {
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get("search")
 
@@ -100,26 +99,14 @@ const SearchView = () => {
   if (!data.searchBlogs.blog.length)
     return (
       <>
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center -ml-4 pb-4 mt-4"
-        >
-          <FaArrowLeft size={25} />
-          <div className="ml-2 text-2xl font-bold">Back</div>
-        </button>
+        <BackButton />
         <div className="text-center">No blogs found.</div>
       </>
     )
 
   return (
     <>
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center -ml-4 pb-4 mt-4"
-      >
-        <FaArrowLeft size={25} />
-        <div className="ml-2 text-2xl font-bold">Back</div>
-      </button>
+      <BackButton />
 
       {data.searchBlogs.blog.map(blog => (
         <div className="p-3 mb-9 border-x-2 shadow-md" key={blog.id}>

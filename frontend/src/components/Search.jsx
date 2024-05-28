@@ -8,6 +8,7 @@ const Search = () => {
 
   const handleSearch = () => {
     navigate(`/search/?search=${search}`)
+    document.querySelector("#left-drawer").checked = false
   }
 
   return (

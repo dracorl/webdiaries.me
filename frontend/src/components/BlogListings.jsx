@@ -73,7 +73,14 @@ const renderBlogs = blogs => {
                           <ul>
                             {monthData.blog.map((blog, index) => (
                               <li key={index}>
-                                <Link to={`/blog/${blog.id}`}>
+                                <Link
+                                  onClick={() =>
+                                    (document.querySelector(
+                                      "#left-drawer"
+                                    ).checked = false)
+                                  }
+                                  to={`/blog/${blog.id}`}
+                                >
                                   {blog.title.slice(0, 20)}
                                 </Link>
                               </li>

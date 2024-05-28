@@ -1,7 +1,7 @@
 import Loading from "./Loading"
 import {useQuery, gql} from "@apollo/client"
-import {Link, useParams, useNavigate} from "react-router-dom"
-import {FaArrowLeft} from "react-icons/fa"
+import {useParams} from "react-router-dom"
+import BackButton from "./BackButton"
 
 const GET_BLOG = gql`
   query Blog($blogId: ID!) {
@@ -20,7 +20,6 @@ const GET_BLOG = gql`
 
 const BlogView = () => {
   const {id} = useParams()
-  const navigate = useNavigate()
 
   const {data, loading} = useQuery(GET_BLOG, {
     variables: {blogId: id}
@@ -30,13 +29,7 @@ const BlogView = () => {
 
   return (
     <>
-      <Link
-        onClick={() => navigate(-1)}
-        className="flex items-center -ml-4 pb-4 mt-4"
-      >
-        <FaArrowLeft size={25} />
-        <div className="ml-2 text-2xl font-bold">Back</div>
-      </Link>
+      <BackButton />
 
       <div className="p-3 mb-9 mt-10">
         <div className="flex flex-col">

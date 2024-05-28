@@ -24,7 +24,12 @@ const Tags = () => {
     <div className="grid-flow-row-dense">
       {data.tagsCount.map(tag => (
         <Link key={tag.id} to={`tag/${tag.id}`}>
-          <button className="mr-px btn btn-outline btn-xs">
+          <button
+            onClick={() =>
+              (document.querySelector("#left-drawer").checked = false)
+            }
+            className="mr-px btn btn-outline btn-xs"
+          >
             {tag.name} ({tag.count})
           </button>
         </Link>
