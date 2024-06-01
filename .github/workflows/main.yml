@@ -48,5 +48,7 @@ jobs:
             cd ~/webdiaries.me/blog-service
             git pull
             sudo docker build -t blog-service .
+            sudo docker stop blog-service
+            sudo docker rm blog-service
             sudo docker run -d --name blog-service --network webdiaries_network -p 4000:4000 blog-service
           EOF
