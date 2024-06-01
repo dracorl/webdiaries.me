@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install SSH client
         run: sudo apt-get install openssh-client
 
       - name: Add SSH key
-        uses: webfactory/ssh-agent@v0.5.3
+        uses: webfactory/ssh-agent@v1
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
