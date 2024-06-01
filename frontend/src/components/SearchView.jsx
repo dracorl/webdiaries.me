@@ -3,6 +3,7 @@ import {useEffect, useCallback, useState} from "react"
 import {useQuery, gql} from "@apollo/client"
 import {Link, useSearchParams} from "react-router-dom"
 import BackButton from "./BackButton"
+import {useDomain} from "../contexts/DomainContext"
 
 const SEARCH_BLOGS = gql`
   query SearchBlogs(
@@ -35,6 +36,7 @@ const SEARCH_BLOGS = gql`
 const SearchView = () => {
   const [searchParams] = useSearchParams()
   const searchTerm = searchParams.get("search")
+  const domainId = useDomain()
 
   const [hasMore, setHasMore] = useState(true)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
@@ -42,7 +44,7 @@ const SearchView = () => {
     variables: {
       offset: 0,
       limit: 10,
-      author: "663271761afe8a40a21a999f",
+      author: domainId,
       searchTerm
     }
   })
