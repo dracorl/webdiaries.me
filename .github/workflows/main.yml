@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SSH client
+        run: sudo apt-get install openssh-client
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install dependencies and build frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
+            cd ~/webdiaries.me/frontend
+            npm install
+            npm run build
+          EOF
+
+      - name: Install dependencies and build user-dashboard
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
+            cd ~/webdiaries.me/user-dashboard
+            npm install
+            npm run build
+          EOF
+
+      - name: Build and run Docker container for blog-service
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
+            cd ~/webdiaries.me/blog-service
+            sudo docker build -t blog-service .
+            sudo docker run -d --name blog-service --network webdiaries_network -p 4000:4000 blog-service
+          EOF
