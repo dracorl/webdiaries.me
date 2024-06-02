@@ -1,0 +1,34 @@
+name: frontend CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - frontend*
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install SSH client
+        run: sudo apt-get install openssh-client
+
+      - name: Add SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install dependencies and build frontend
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
+            cd ~/webdiaries.me/frontend
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            git pull
+            npm install
+            npm run build
+          EOF

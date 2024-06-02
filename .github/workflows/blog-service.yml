@@ -1,9 +1,11 @@
-name: CI/CD Pipeline
+name: blog-service CI/CD Pipeline
 
 on:
   push:
     branches:
       - main
+    tags:
+      - blog-service*
 
 jobs:
   build-and-deploy:
@@ -19,28 +21,6 @@ jobs:
         uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Install dependencies and build frontend
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
-            cd ~/webdiaries.me/frontend
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            git pull
-            npm install
-            npm run build
-          EOF
-
-      - name: Install dependencies and build user-dashboard
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
-            cd ~/webdiaries.me/user-dashboard
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
-            git pull
-            npm install
-            npm run build
-          EOF
 
       - name: Build and run Docker container for blog-service
         run: |
