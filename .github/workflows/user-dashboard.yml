@@ -2,8 +2,6 @@ name: user-dashboard CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
     tags:
       - user-dashboard*
 

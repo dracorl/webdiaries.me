@@ -2,8 +2,6 @@ name: blog-service CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
     tags:
       - blog-service*
 
