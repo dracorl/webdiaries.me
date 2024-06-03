@@ -29,4 +29,4 @@ const userTypeDefs = gql`
   }
 `
 
-export {userTypeDefs}
+export default userTypeDefs

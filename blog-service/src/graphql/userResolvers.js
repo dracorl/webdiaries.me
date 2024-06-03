@@ -2,6 +2,7 @@ import {User} from "../database/models/index.js"
 import {hashPassword, comparePasswords} from "../helpers/hashing.js"
 import {signToken, verifyToken, decodeToken} from "../helpers/jwt.js"
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../config/index.js"
+import {checkDomain, createDomain, deleteDomain} from "../helpers/bind-api.js"
 
 // TODO: Implement the Error class
 const userResolvers = {
@@ -19,7 +20,6 @@ const userResolvers = {
   },
   Mutation: {
     createUser: async (_, {username, email, password}) => {
-      console.log(username, email, password)
       const existingUsername = await User.findOne({username})
       if (existingUsername) {
         throw new Error(
@@ -34,7 +34,13 @@ const userResolvers = {
           "DUPLICATE_EMAIL"
         )
       }
-      return await User.create({
+
+      if (await checkDomain(username))
+        throw new Error("Please try another username", "DOMAIN_NOT_AVAILABLE")
+
+      await createDomain(username)
+
+      return User.create({
         username,
         email,
         password: await hashPassword(password)
@@ -45,14 +51,15 @@ const userResolvers = {
       if (email) updates.email = email
       if (password) updates.password = password
 
-      return await User.findByIdAndUpdate(id, updates, {new: true}).select(
+      return User.findByIdAndUpdate(id, updates, {new: true}).select(
         "-password"
       )
     },
     deleteUser: async (_, {id}) => {
-      return await User.findByIdAndDelete(id).select("-password")
+      const response = await User.findById(id).select("-password")
+      await deleteDomain(response.username)
+      return User.findByIdAndDelete(id).select("-password")
     },
-    // login with jwt
     login: async (_, {email, password}) => {
       const user = await User.findOne({email})
       if (!user) throw new Error("User not found")
@@ -81,4 +88,4 @@ const userResolvers = {
   }
 }
 
-export {userResolvers}
+export default userResolvers

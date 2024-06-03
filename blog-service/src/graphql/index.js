@@ -1,7 +1,7 @@
 import {mergeTypeDefs, mergeResolvers} from "@graphql-tools/merge"
 
-import {userTypeDefs} from "./userTypeDefs.js"
-import {userResolvers} from "./userResolvers.js"
+import userTypeDefs from "./userTypeDefs.js"
+import userResolvers from "./userResolvers.js"
 import blogTypeDefs from "./blogTypeDefs.js"
 import blogResolvers from "./blogResolvers.js"
 
