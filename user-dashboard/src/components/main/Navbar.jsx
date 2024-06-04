@@ -1,4 +1,4 @@
-import reactLogo from "../../assets/react.svg"
+import reactLogo from "../../../public/icon.svg"
 import {useState} from "react"
 import {clearTokens} from "../../utils/authUtils"
 import {useNavigate} from "react-router-dom"
@@ -29,8 +29,12 @@ const Navbar = () => {
   return (
     <div className="navbar bg-indigo-700 px-5 shadow-md">
       <div className="flex-1">
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+        <a href="/">
+          <img
+            src={reactLogo}
+            className="logo react max-w-12"
+            alt="React logo"
+          />
         </a>
       </div>
       <div className="flex-none">
