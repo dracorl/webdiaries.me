@@ -65,7 +65,7 @@ const SearchView = () => {
         variables: {
           offset: data.searchBlogs.blog.length,
           limit: 10,
-          author: "663271761afe8a40a21a999f",
+          author: domainId,
           searchTerm
         },
         updateQuery: (prev, {fetchMoreResult}) => {
@@ -90,7 +90,7 @@ const SearchView = () => {
         }
       })
     }
-  }, [data, fetchMore, isFetchingMore, hasMore, searchTerm])
+  }, [data, fetchMore, isFetchingMore, hasMore, searchTerm, domainId])
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
@@ -111,7 +111,10 @@ const SearchView = () => {
       <BackButton />
 
       {data.searchBlogs.blog.map(blog => (
-        <div className="p-3 mb-9 border-x-2 shadow-md" key={blog.id}>
+        <div
+          className="p-3 mb-9 border-x-2 border-current shadow-md"
+          key={blog.id}
+        >
           <div className="flex flex-col">
             <div className="italic self-end">
               {new Date(parseInt(blog.createdAt)).toLocaleDateString("en-US", {

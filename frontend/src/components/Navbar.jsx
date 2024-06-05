@@ -1,5 +1,6 @@
 import Search from "./Search"
 import {Link} from "react-router-dom"
+import Theme from "./Theme"
 
 const Navbar = () => {
   return (
@@ -27,20 +28,28 @@ const Navbar = () => {
           </label>
         </div>
         <div className="flex-1 lg:hidden">
-          <Link to="/" className="btn btn-ghost text-xl font-thin italic">
+          <Link
+            to="/"
+            className="base-content btn btn-ghost text-xl font-thin italic"
+          >
             {window.location.hostname.split(".")[0]}
           </Link>
         </div>
         <div className="flex-none items-center w-full hidden lg:flex">
           <div className="flex-1">
-            <Link to="/" className="btn btn-ghost text-xl font-thin italic">
+            <Link
+              to="/"
+              className="base-content btn btn-ghost text-xl font-thin italic"
+            >
               {window.location.hostname.split(".")[0]}
             </Link>
           </div>
           <div className="flex-1 flex justify-center">
-            <Search />
+            <Search className="base-content" />
           </div>
-          <div className="flex-1"></div>
+          <div className="flex-1 flex justify-end">
+            <Theme className="base-content" />
+          </div>
         </div>
       </div>
       <div className="pt-16 block md:hidden"></div>

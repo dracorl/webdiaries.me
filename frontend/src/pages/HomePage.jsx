@@ -7,23 +7,24 @@ import Navbar from "../components/Navbar"
 import SearchView from "../components/SearchView"
 import NotFound from "../components/NotFound"
 import Search from "../components/Search"
+import Theme from "../components/Theme"
 
 const HomePage = () => {
   return (
     <>
       <div className="drawer">
         <input id="left-drawer" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col">
+        <div className="bg-base-100 text-base-content drawer-content flex flex-col">
           {/* Navbar */}
           <Navbar />
 
-          <div className="w-full p-0.5">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div className="hidden md:block md:col-span-3 bg-gray-100 p-4 h-screen sticky top-0 overflow-auto">
+          <div className="bg-base-100 w-full p-0.5">
+            <div className="bg-base-200 grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="hidden md:block md:col-span-3 p-4 h-screen sticky top-0 overflow-auto">
                 <BlogListings />
               </div>
 
-              <div className="md:col-span-7 bg-white p-1">
+              <div className="md:col-span-7 p-1">
                 <Routes>
                   <Route path="/" element={<BlogScroll />} />
                   <Route path="tag/:id" element={<BlogScroll />} />
@@ -33,7 +34,7 @@ const HomePage = () => {
                 </Routes>
               </div>
 
-              <div className="hidden md:block md:col-span-2 bg-gray-100 p-4 h-screen sticky top-0 overflow-auto">
+              <div className="hidden md:block md:col-span-2 p-4 h-screen sticky top-0 overflow-auto">
                 <Tags />
               </div>
             </div>
@@ -48,6 +49,9 @@ const HomePage = () => {
           <ul className="menu p-4 w-80 min-h-full bg-base-200">
             {/* Sidebar content here */}
             <li className="mt-20">
+              <Theme />
+            </li>
+            <li className="mt-5">
               <Search />
             </li>
             <li className="mt-5">

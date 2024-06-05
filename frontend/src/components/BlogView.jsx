@@ -31,7 +31,7 @@ const BlogView = () => {
     <>
       <BackButton />
 
-      <div className="p-3 mb-9 mt-10">
+      <div className="border-x-2 border-current p-3 mb-9 mt-10">
         <div className="flex flex-col">
           <div className="italic self-end">
             {new Date(parseInt(data.blog.createdAt)).toLocaleDateString(
@@ -45,11 +45,11 @@ const BlogView = () => {
             )}
           </div>
 
-          <div className="text-center text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-base-content text-center prose-xl md:prose-2xl font-bold mb-4">
             {data.blog.title}
           </div>
           <div
-            className="mt-10 prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl m-5 focus:outline-none"
+            className="mt-10 text-base-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-sm xl:prose-base m-5 focus:outline-none"
             dangerouslySetInnerHTML={{
               __html: data.blog.content
             }}

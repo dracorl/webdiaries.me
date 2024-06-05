@@ -84,7 +84,7 @@ const BlogScroll = () => {
         }
       })
     }
-  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore])
+  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore, domainId])
   useEffect(() => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -96,7 +96,10 @@ const BlogScroll = () => {
     <>
       {window.history.length > 2 && id && <BackButton />}
       {data.blogs.blog.map(blog => (
-        <div className="p-3 mb-9 border-x-2 shadow-md" key={blog.id}>
+        <div
+          className="p-3 mb-9 border-x-2 border-current shadow-md"
+          key={blog.id}
+        >
           <div className="flex flex-col">
             <div className="italic self-end">
               {new Date(parseInt(blog.createdAt)).toLocaleDateString("en-US", {
@@ -107,8 +110,11 @@ const BlogScroll = () => {
               })}
             </div>
 
-            <div className="text-base md:text-2xl font-bold mb-4">{blog.title}</div>
-            <div className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl m-5 focus:outline-none"
+            <div className="text-base-content text-base md:text-xl font-bold mb-4">
+              {blog.title}
+            </div>
+            <div
+              className="text-base-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-sm xl:prose-base m-5 focus:outline-none"
               dangerouslySetInnerHTML={{
                 __html:
                   blog.content.length > 200
@@ -118,7 +124,9 @@ const BlogScroll = () => {
             />
             <div className="mt-5 self-end">
               <Link to={`/blog/${blog.id}`}>
-                <button className="btn btn-outline btn-xs">Read more</button>
+                <button className="bg-neutral text-neutral-content btn btn-outline btn-xs">
+                  Read more
+                </button>
               </Link>
             </div>
             <div className="mt-5">
