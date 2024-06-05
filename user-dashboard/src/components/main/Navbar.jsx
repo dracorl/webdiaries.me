@@ -1,4 +1,4 @@
-import reactLogo from "../../../public/icon.svg"
+import reactLogo from "/icon.svg"
 import {useState} from "react"
 import {clearTokens} from "../../utils/authUtils"
 import {useNavigate} from "react-router-dom"

@@ -29,7 +29,7 @@ const Tiptap = ({openModal, editorContent, setEditorContent}) => {
       editorProps={{
         attributes: {
           class:
-            "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
+            "prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl m-5 focus:outline-none"
         }
       }}
       onUpdate={({editor}) => setEditorContent(editor.getHTML())}

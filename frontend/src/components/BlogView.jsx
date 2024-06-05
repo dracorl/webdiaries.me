@@ -45,11 +45,11 @@ const BlogView = () => {
             )}
           </div>
 
-          <div className="text-center text-3xl font-bold mb-4">
+          <div className="text-center text-4xl md:text-5xl font-bold mb-4">
             {data.blog.title}
           </div>
           <div
-            className="mt-10"
+            className="mt-10 prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl m-5 focus:outline-none"
             dangerouslySetInnerHTML={{
               __html: data.blog.content
             }}

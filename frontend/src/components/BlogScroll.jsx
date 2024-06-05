@@ -64,7 +64,7 @@ const BlogScroll = () => {
         variables: {
           offset: data.blogs.blog.length,
           limit: 10,
-          username: "enginyuksel",
+          author: domainId,
           tagId: id ? id : null,
           published: true
         },
@@ -107,8 +107,8 @@ const BlogScroll = () => {
               })}
             </div>
 
-            <div className="text-xl font-bold mb-4">{blog.title}</div>
-            <div
+            <div className="text-base md:text-2xl font-bold mb-4">{blog.title}</div>
+            <div className="prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-xl m-5 focus:outline-none"
               dangerouslySetInnerHTML={{
                 __html:
                   blog.content.length > 200
