@@ -97,7 +97,7 @@ const BlogScroll = () => {
       {window.history.length > 2 && id && <BackButton />}
       {data.blogs.blog.map(blog => (
         <div
-          className="p-3 mb-9 border-x-2 border-current shadow-md"
+          className="p-3 mb-9 md:border-x-2 md:border-current shadow-md"
           key={blog.id}
         >
           <div className="flex flex-col">
