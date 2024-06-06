@@ -49,7 +49,7 @@ const BlogView = () => {
             {data.blog.title}
           </div>
           <div
-            className="mt-10 text-base-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-sm xl:prose-base m-5 focus:outline-none"
+            className="mt-10 text-base-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-sm xl:prose-base focus:outline-none"
             dangerouslySetInnerHTML={{
               __html: data.blog.content
             }}
