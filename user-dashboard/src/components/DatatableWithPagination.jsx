@@ -47,8 +47,6 @@ const DataTableWithPagination = () => {
         {}
       )
     )
-
-    console.log("Setting checked states...", checkedStates)
   }, [data])
 
   const columns = [
@@ -74,16 +72,10 @@ const DataTableWithPagination = () => {
           type="checkbox"
           className="toggle"
           checked={checkedStates[row.id] || false}
-          onChange={e => {
-            setCheckedStates(prevStates => ({
-              ...prevStates,
-              [row.id]: e.target.checked
-            }))
-          }}
+          onChange={() => {}} //dummy function react things
           onClick={e => {
             e.preventDefault()
             setId(row.id)
-            console.log("Publishing...", id)
             document.getElementById("publishedModal").showModal()
           }}
         />

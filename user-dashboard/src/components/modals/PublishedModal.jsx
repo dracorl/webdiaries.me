@@ -16,26 +16,18 @@ const PublishedModal = ({blogId, checkedStates, setCheckedStates}) => {
     let update = {
       variables: {
         updateBlogId: blogId,
-        published: checkedStates[blogId]
+        published: !checkedStates[blogId]
       }
     }
-    // console.log("publishedModal blogId: ", blogId)
-    // console.log("publishedModal checkedStates: ", checkedStates[blogId])
-    console.log("publishedModal update: ", update)
     try {
-      await updateBlog({
-        variables: {
-          updateBlogId: blogId,
-          published: checkedStates[blogId]
-        }
-      })
-      toast.success("Blog post updated successfully")
-    } catch (error) {
-      console.error(error)
+      await updateBlog(update)
       setCheckedStates(prevStates => ({
         ...prevStates,
         [blogId]: !prevStates[blogId]
       }))
+      toast.success("Blog post updated successfully")
+    } catch (error) {
+      console.error(error)
       toast.error(error.message)
     }
     document.getElementById("publishedModal").close()
