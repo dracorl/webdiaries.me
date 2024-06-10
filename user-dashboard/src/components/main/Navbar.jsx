@@ -27,7 +27,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-indigo-700 px-5 shadow-md">
+    <div className="navbar bg-base-300 text-base-content px-5 shadow-md">
       <div className="flex-1">
         <a href="/">
           <img

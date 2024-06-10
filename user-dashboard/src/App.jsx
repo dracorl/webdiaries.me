@@ -11,6 +11,7 @@ import PostsPage from "./pages/PostsPage"
 import EditContentPage from "./pages/EditContentPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import ProtectedRoute from "./components/main/ProtectedRoute"
+import SettingsPage from "./pages/SettingsPage"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -30,6 +31,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <PostsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
             </ProtectedRoute>
           }
         />

@@ -39,6 +39,9 @@ const DataTableWithPagination = () => {
   const [id, setId] = useState("")
   const [checkedStates, setCheckedStates] = useState({})
   const navigate = useNavigate()
+  const userPrefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
 
   useEffect(() => {
     setCheckedStates(
@@ -155,6 +158,7 @@ const DataTableWithPagination = () => {
   return (
     <>
       <DataTable
+        theme={userPrefersDark ? "dark" : "default"}
         title="Blog Posts"
         columns={columns}
         data={data}

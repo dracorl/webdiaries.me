@@ -8,9 +8,10 @@ import {checkDomain, createDomain, deleteDomain} from "../helpers/bind-api.js"
 const userResolvers = {
   Query: {
     users: async () => User.find().select("-password"),
-    user: async (_, {id, username}) => {
+    user: async (_, {id, username}, {user}) => {
       if (id) return User.findById(id).select("-password")
       if (username) return User.findOne({username}).select("-password")
+      if (user.userID) return User.findById(user.userID).select("-password")
     },
     isTokenExpired: async (_, {token}) => {
       const decodedToken = decodeToken(token)
@@ -46,12 +47,12 @@ const userResolvers = {
         password: await hashPassword(password)
       })
     },
-    updateUser: async (_, {id, email, password}) => {
+    updateUser: async (_, {email, password}, {user}) => {
       const updates = {}
       if (email) updates.email = email
       if (password) updates.password = password
 
-      return User.findByIdAndUpdate(id, updates, {new: true}).select(
+      return User.findByIdAndUpdate(user.userID, updates, {new: true}).select(
         "-password"
       )
     },

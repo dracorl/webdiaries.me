@@ -7,7 +7,7 @@ const Drawer = () => {
   return (
     <div className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content">
+      <div className="drawer-content min-h-screen flex flex-col">
         {/* Page content here */}
         <Navbar />
         <Outlet />

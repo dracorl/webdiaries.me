@@ -1,25 +1,39 @@
+import {Link} from "react-router-dom"
+import {FaGithub, FaTwitter, FaInstagram, FaHeart} from "react-icons/fa"
+
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-neutral text-neutral-content flex justify-around ">
+    <footer className="footer p-10 bg-neutral text-neutral-content flex justify-between ">
       <nav>
-        <h6 className="footer-title">Services</h6>
-        <a className="link link-hover">Branding</a>
-        <a className="link link-hover">Design</a>
-        <a className="link link-hover">Marketing</a>
-        <a className="link link-hover">Advertisement</a>
+        <div>
+          Made with <FaHeart className="inline text-red-600" />
+        </div>
       </nav>
-      <nav>
-        <h6 className="footer-title">Company</h6>
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
-      </nav>
-      <nav>
-        <h6 className="footer-title">Legal</h6>
-        <a className="link link-hover">Terms of use</a>
-        <a className="link link-hover">Privacy policy</a>
-        <a className="link link-hover">Cookie policy</a>
+      <nav className="gap-10 flex justify-between">
+        <Link
+          to="https://github.com/dracorlll"
+          target="_blank"
+          className="link link-hover"
+        >
+          <FaTwitter className="inline text-xl mr-1" />
+          Twitter
+        </Link>
+        <Link
+          to="https://www.instagram.com/ykslngn/"
+          target="_blank"
+          className="link link-hover"
+        >
+          <FaInstagram className="inline text-xl mr-1" />
+          Instagram
+        </Link>
+        <Link
+          to="https://github.com/dracorlll"
+          target="_blank"
+          className="link link-hover"
+        >
+          <FaGithub className="inline text-xl mr-1" />
+          Github
+        </Link>
       </nav>
     </footer>
   )

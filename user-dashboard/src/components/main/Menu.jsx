@@ -11,12 +11,12 @@ const Menu = () => {
       <Link
         onClick={drawerClose}
         to="/create"
-        className="btn btn-primary btn-block"
+        className="btn btn-neutral btn-block"
       >
-        <FaPlus className="inline text-lg mb-1 mr-1" />
+        <FaPlus className="text-neutral-content inline text-lg mb-1 mr-1" />
         Create New Post
       </Link>
-      <ul className="menu bg-base-200 w-56 rounded-box">
+      <ul className="menu bg-base-200 text-base-content w-56 rounded-box">
         <li>
           <Link onClick={drawerClose} to="/posts">
             <FaList className="inline text-lg mb-1 mr-1" />
@@ -30,10 +30,10 @@ const Menu = () => {
           </a>
         </li>
         <li>
-          <a>
+          <Link onClick={drawerClose} to="/settings">
             <FaCog className="inline text-lg mb-1 mr-1" />
             Settings
-          </a>
+          </Link>
         </li>
         <li>
           <a>
