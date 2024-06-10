@@ -47,10 +47,12 @@ const userResolvers = {
         password: await hashPassword(password)
       })
     },
-    updateUser: async (_, {email, password}, {user}) => {
+    updateUser: async (_, {email, password, bio, links}, {user}) => {
       const updates = {}
       if (email) updates.email = email
       if (password) updates.password = password
+      if (bio) updates.bio = bio
+      if (links) updates.links = links
 
       return User.findByIdAndUpdate(user.userID, updates, {new: true}).select(
         "-password"
