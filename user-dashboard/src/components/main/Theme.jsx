@@ -49,7 +49,7 @@ const Theme = () => {
     setTheme(localStorage.getItem("theme"))
   }, [])
   return (
-    <>
+    <div className="flex-col flex gap-3">
       <div className="text-lg self-center">Select Theme</div>
       <select
         value={theme}
@@ -63,7 +63,7 @@ const Theme = () => {
           </option>
         ))}
       </select>
-    </>
+    </div>
   )
 }
 export default Theme

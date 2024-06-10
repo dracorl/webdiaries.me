@@ -10,7 +10,7 @@ const Tabs = ({children, name, ariaLabel, defaultChecked}) => {
         defaultChecked={defaultChecked}
       />
       <div role="tabpanel" className="tab-content p-10">
-        <div className="flex-col flex gap-3">{children}</div>
+        {children}
       </div>
     </>
   )
