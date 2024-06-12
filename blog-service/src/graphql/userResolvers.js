@@ -3,6 +3,7 @@ import {hashPassword, comparePasswords} from "../helpers/hashing.js"
 import {signToken, verifyToken, decodeToken} from "../helpers/jwt.js"
 import {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} from "../config/index.js"
 import {checkDomain, createDomain, deleteDomain} from "../helpers/bind-api.js"
+import sendMail from "../helpers/mail.js"
 
 // TODO: Implement the Error class
 const userResolvers = {
@@ -50,7 +51,7 @@ const userResolvers = {
     updateUser: async (_, {email, password, bio, links}, {user}) => {
       const updates = {}
       if (email) updates.email = email
-      if (password) updates.password = password
+      if (password) updates.password = await hashPassword(password)
       if (bio) updates.bio = bio
       if (links) updates.links = links
 
@@ -87,6 +88,29 @@ const userResolvers = {
         ACCESS_TOKEN_SECRET
       )
       return {accessToken}
+    },
+    forgotToken: async (_, {email}) => {
+      const user = await User.findOne({email})
+      if (!user) throw new Error("User not found")
+      const token = signToken(
+        {userID: user.id, resetToken: true, expiresIn: "2h"},
+        ACCESS_TOKEN_SECRET
+      )
+
+      await sendMail(email, token)
+      return "Email sent successfully"
+    },
+    resetPassword: async (_, {token, password}) => {
+      const verifiedToken = verifyToken(token, ACCESS_TOKEN_SECRET)
+      if (!verifiedToken) throw new Error("Invalid token")
+
+      if (!verifiedToken.resetToken) throw new Error("Invalid token")
+
+      const user = await User.findByIdAndUpdate(verifiedToken.userID, {
+        password: await hashPassword(password)
+      })
+
+      return user
     }
   }
 }

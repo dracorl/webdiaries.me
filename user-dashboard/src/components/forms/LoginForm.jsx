@@ -3,7 +3,8 @@ import {FaAt, FaKey} from "react-icons/fa"
 import {useMutation, gql} from "@apollo/client"
 import {saveTokens} from "../../utils/authUtils"
 import {useAuth} from "../../contexts/AuthContext"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, Link} from "react-router-dom"
+import {toast} from "react-toastify"
 
 const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -24,7 +25,6 @@ const LoginForm = () => {
 
   const handleLogin = async e => {
     e.preventDefault()
-    console.log("Logging in...", email, password)
     try {
       const response = await loginMutation({variables: {email, password}})
       saveTokens(
@@ -35,6 +35,7 @@ const LoginForm = () => {
       navigate("/posts")
     } catch (error) {
       console.error(error)
+      toast.error(error.message)
     }
   }
 
@@ -68,9 +69,13 @@ const LoginForm = () => {
           </label>
         </div>
         <div className="flex justify-evenly">
-          <button type="button" className="btn btn-primary mr-2">
+          <Link
+            to="/forgot-password"
+            type="button"
+            className="btn btn-primary mr-2"
+          >
             Forgot Password?
-          </button>
+          </Link>
           <button type="submit" className="btn btn-primary">
             Login
           </button>

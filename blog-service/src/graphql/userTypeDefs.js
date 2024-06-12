@@ -34,6 +34,8 @@ const userTypeDefs = gql`
     deleteUser(id: ID!): User
     login(email: String!, password: String!): Token
     refreshToken(token: String!): Token
+    forgotToken(email: String!): String
+    resetPassword(token: String!, password: String!): User
   }
 `
 

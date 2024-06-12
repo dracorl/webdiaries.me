@@ -12,6 +12,8 @@ import EditContentPage from "./pages/EditContentPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import ProtectedRoute from "./components/main/ProtectedRoute"
 import SettingsPage from "./pages/SettingsPage"
+import ResetPasswordPage from "./pages/ResetPasswordPage"
+import ForgotPasswordPage from "./pages/ForgotPasswordPage"
 
 const App = () => {
   const router = createBrowserRouter(
@@ -50,6 +52,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     )
