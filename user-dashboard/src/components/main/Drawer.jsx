@@ -5,7 +5,7 @@ import {Outlet} from "react-router-dom"
 
 const Drawer = () => {
   return (
-    <div className="drawer">
+    <div className="drawer overflow-x-hidden">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content min-h-screen flex flex-col">
         {/* Page content here */}
@@ -13,13 +13,13 @@ const Drawer = () => {
         <Outlet />
         <Footer />
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side w-64">
         <label
           htmlFor="my-drawer"
           aria-label="close sidebar"
           className="drawer-overlay"
         ></label>
-        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+        <ul className="menu p-4 w-64 min-h-full bg-base-200 text-base-content">
           {/* Sidebar content here */}
           <Menu />
         </ul>
