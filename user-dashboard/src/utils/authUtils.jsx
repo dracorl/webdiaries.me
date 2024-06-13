@@ -37,7 +37,6 @@ const getUsername = async () => {
   const {data} = await client.query({
     query: GET_USERNAME_QUERY
   })
-  console.log(data.user.username)
   return data.user.username
 }
 
