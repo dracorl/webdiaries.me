@@ -7,6 +7,14 @@ const IS_TOKEN_EXPIRED_QUERY = gql`
   }
 `
 
+const GET_USERNAME_QUERY = gql`
+  query Query {
+    user {
+      username
+    }
+  }
+`
+
 const isLoggedIn = () => {
   const accessToken = localStorage.getItem("accessToken")
   if (!accessToken) return false
@@ -25,6 +33,14 @@ const isTokenExpired = async token => {
   return data.isTokenExpired
 }
 
+const getUsername = async () => {
+  const {data} = await client.query({
+    query: GET_USERNAME_QUERY
+  })
+  console.log(data.user.username)
+  return data.user.username
+}
+
 const saveTokens = (accessToken, refreshToken) => {
   localStorage.setItem("accessToken", accessToken)
   localStorage.setItem("refreshToken", refreshToken)
@@ -35,4 +51,4 @@ const clearTokens = () => {
   localStorage.removeItem("refreshToken")
 }
 
-export {isLoggedIn, isTokenExpired, saveTokens, clearTokens}
+export {isLoggedIn, isTokenExpired, saveTokens, clearTokens, getUsername}

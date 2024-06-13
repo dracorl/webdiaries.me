@@ -1,13 +1,23 @@
-import reactLogo from "/icon.svg"
-import {useState} from "react"
+import mainLogo from "/icon.svg"
+import {useState, useEffect} from "react"
 import {clearTokens} from "../../utils/authUtils"
-import {useNavigate} from "react-router-dom"
+import {useNavigate, Link} from "react-router-dom"
 import {useAuth} from "../../contexts/AuthContext"
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
-  const {loggedIn, logout} = useAuth()
+  const {loggedIn, logout, getUsername} = useAuth()
+  const [username, setUsername] = useState(null)
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      const result = await getUsername()
+      setUsername(result)
+    }
+
+    fetchUsername()
+  }, [getUsername])
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen)
@@ -29,13 +39,16 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-300 text-base-content px-5 shadow-md">
       <div className="flex-1">
-        <a href="/">
-          <img
-            src={reactLogo}
-            className="logo react max-w-12"
-            alt="React logo"
-          />
-        </a>
+        {loggedIn && (
+          <Link to={`https://${username}.webdiaries.me`} target="_blank">
+            <img src={mainLogo} className="logo react max-w-12" />
+          </Link>
+        )}
+        {!loggedIn && (
+          <Link to="/">
+            <img src={mainLogo} className="logo react max-w-12" />
+          </Link>
+        )}
       </div>
       <div className="flex-none">
         {loggedIn && (
