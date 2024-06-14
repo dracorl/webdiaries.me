@@ -31,7 +31,7 @@ const BlogView = () => {
     <>
       <BackButton />
 
-      <div className="md:border-x-2 md:border-current p-3 mb-9 mt-10">
+      <div className="p-3 mb-9 mt-10">
         <div className="flex flex-col">
           <div className="italic self-end">
             {new Date(parseInt(data.blog.createdAt)).toLocaleDateString(

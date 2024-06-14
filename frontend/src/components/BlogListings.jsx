@@ -48,7 +48,7 @@ const listBlogs = data => {
 
 const renderBlogs = blogs => {
   return (
-    <ul className="ms-0 menu bg-base-300 rounded-box">
+    <ul className="ms-0 menu rounded-box">
       {Object.entries(blogs)
         .reverse()
         .map(([year, yearData]) => (

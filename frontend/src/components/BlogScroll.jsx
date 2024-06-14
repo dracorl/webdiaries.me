@@ -96,10 +96,7 @@ const BlogScroll = () => {
     <>
       {window.history.length > 2 && id && <BackButton />}
       {data.blogs.blog.map(blog => (
-        <div
-          className="p-3 mb-9 md:border-x-2 md:border-current shadow-md"
-          key={blog.id}
-        >
+        <div className="p-3 mb-9 shadow-md" key={blog.id}>
           <div className="flex flex-col">
             <div className="italic self-end">
               {new Date(parseInt(blog.createdAt)).toLocaleDateString("en-US", {

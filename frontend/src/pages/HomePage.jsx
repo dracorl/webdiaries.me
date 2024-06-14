@@ -14,17 +14,17 @@ const HomePage = () => {
     <>
       <div className="drawer">
         <input id="left-drawer" type="checkbox" className="drawer-toggle" />
-        <div className="bg-base-100 text-base-content drawer-content flex flex-col">
+        <div className="bg-base-200 text-base-content drawer-content flex flex-col">
           {/* Navbar */}
           <Navbar />
 
-          <div className="bg-base-100 w-full p-0.5">
-            <div className="bg-base-200 grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div className="hidden md:block md:col-span-3 p-4 h-screen sticky top-0 overflow-auto">
+          <div className="w-full">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+              <div className="shadow-md bg-base-300 text-base-content hidden md:block md:col-span-3 p-4 h-screen sticky top-0 overflow-auto">
                 <BlogListings />
               </div>
 
-              <div className="md:col-span-7 p-1">
+              <div className="bg-base-200 md:col-span-7 p-1">
                 <Routes>
                   <Route path="/" element={<BlogScroll />} />
                   <Route path="tag/:id" element={<BlogScroll />} />
@@ -34,7 +34,7 @@ const HomePage = () => {
                 </Routes>
               </div>
 
-              <div className="hidden md:block md:col-span-2 p-4 h-screen sticky top-0 overflow-auto">
+              <div className="shadow-md bg-base-300 text-base-content hidden md:block md:col-span-2 p-4 h-screen sticky top-0 overflow-auto">
                 <Tags />
               </div>
             </div>

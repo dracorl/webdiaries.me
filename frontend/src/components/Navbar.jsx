@@ -5,7 +5,7 @@ import Theme from "./Theme"
 const Navbar = () => {
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 md:relative w-full navbar bg-base-300 z-50 shadow-sm">
+      <div className="fixed top-0 left-0 right-0 md:relative w-full navbar bg-neutral text-neutral-content z-50 shadow-md">
         <div className="flex-none lg:hidden">
           <label
             htmlFor="left-drawer"
