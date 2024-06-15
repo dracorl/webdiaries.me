@@ -1,5 +1,10 @@
 import mongoose from "mongoose"
 
+const linkSchema = new mongoose.Schema({
+  name: String,
+  url: String
+})
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -21,7 +26,7 @@ const userSchema = new mongoose.Schema(
       default: ""
     },
     links: {
-      type: Array,
+      type: [linkSchema],
       default: []
     }
   },

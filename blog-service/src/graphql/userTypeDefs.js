@@ -8,12 +8,22 @@ const userTypeDefs = gql`
     createdAt: String
     updatedAt: String
     bio: String
-    links: [String]
+    links: [Link]
   }
 
   type Token {
     accessToken: String
     refreshToken: String
+  }
+
+  type Link {
+    name: String
+    url: String
+  }
+
+  input LinkInput {
+    name: String
+    url: String
   }
 
   type Query {
@@ -28,7 +38,7 @@ const userTypeDefs = gql`
       username: String
       email: String
       bio: String
-      links: [String]
+      links: [LinkInput]
       password: String
     ): User
     deleteUser(id: ID!): User

@@ -8,6 +8,7 @@ import SearchView from "../components/SearchView"
 import NotFound from "../components/NotFound"
 import Search from "../components/Search"
 import Theme from "../components/Theme"
+import Bio from "../components/Bio"
 
 const HomePage = () => {
   return (
@@ -30,6 +31,7 @@ const HomePage = () => {
                   <Route path="tag/:id" element={<BlogScroll />} />
                   <Route path="blog/:id" element={<BlogView />} />
                   <Route path="search/" element={<SearchView />} />
+                  <Route path="about/" element={<Bio />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </div>

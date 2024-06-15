@@ -29,7 +29,7 @@ const Navbar = () => {
         </div>
         <div className="flex-1 lg:hidden">
           <Link
-            to="/"
+            to="/about"
             className="base-content btn btn-ghost text-xl font-thin italic"
           >
             {window.location.hostname.split(".")[0]}
@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="flex-none items-center w-full hidden lg:flex">
           <div className="flex-1">
             <Link
-              to="/"
+              to="/about"
               className="base-content btn btn-ghost text-xl font-thin italic"
             >
               {window.location.hostname.split(".")[0]}

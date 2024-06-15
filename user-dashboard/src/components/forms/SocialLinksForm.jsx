@@ -5,13 +5,16 @@ import {toast} from "react-toastify"
 const GET_USER_LINKS_QUERY = gql`
   query User {
     user {
-      links
+      links {
+        name
+        url
+      }
     }
   }
 `
 
 const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUser($links: [String]) {
+  mutation UpdateUser($links: [LinkInput]) {
     updateUser(links: $links) {
       id
     }
@@ -20,11 +23,13 @@ const UPDATE_USER_MUTATION = gql`
 
 const SocialLinksForm = () => {
   const {data} = useQuery(GET_USER_LINKS_QUERY)
-  const [links, setLinks] = useState(["", "", "", ""])
+  const [links, setLinks] = useState([{name: "", url: ""}])
   const [updateUser] = useMutation(UPDATE_USER_MUTATION)
 
   useEffect(() => {
-    if (data?.user?.links) setLinks(data?.user?.links)
+    if (data?.user?.links)
+      // eslint-disable-next-line no-unused-vars
+      setLinks(data.user.links.map(({__typename, ...link}) => link))
   }, [data])
 
   const handleSave = async e => {
@@ -50,50 +55,34 @@ const SocialLinksForm = () => {
   return (
     <form onSubmit={handleSave} className="flex-col flex gap-3">
       <div className="text-lg self-center">Social Links</div>
-      <input
-        type="url"
-        className="grow input input-bordered flex"
-        placeholder="Social Media"
-        value={links[0]}
-        onChange={e => {
-          let newLinks = [...links]
-          newLinks[0] = e.target.value
-          setLinks(newLinks)
-        }}
-      />
-      <input
-        type="url"
-        className="grow input input-bordered flex"
-        placeholder="Social Media"
-        value={links[1]}
-        onChange={e => {
-          let newLinks = [...links]
-          newLinks[1] = e.target.value
-          setLinks(newLinks)
-        }}
-      />
-      <input
-        type="url"
-        className="grow input input-bordered flex"
-        placeholder="Social Media"
-        value={links[2]}
-        onChange={e => {
-          let newLinks = [...links]
-          newLinks[2] = e.target.value
-          setLinks(newLinks)
-        }}
-      />
-      <input
-        type="url"
-        className="grow input input-bordered flex"
-        placeholder="Social Media"
-        value={links[3]}
-        onChange={e => {
-          let newLinks = [...links]
-          newLinks[3] = e.target.value
-          setLinks(newLinks)
-        }}
-      />
+      {links.map((link, index) => (
+        <div key={index} className="join">
+          <input
+            type="text"
+            className="input input-bordered join-item"
+            placeholder="Name"
+            value={link.name || ""}
+            onChange={e => {
+              let newLinks = [...links]
+              newLinks[index] = {...newLinks[index], name: e.target.value}
+              setLinks(newLinks)
+            }}
+            required={link.url && link.url.length > 0}
+          />
+          <input
+            type="url"
+            className="input input-bordered join-item"
+            placeholder="Social Media"
+            value={link.url || ""}
+            onChange={e => {
+              let newLinks = [...links]
+              newLinks[index] = {...newLinks[index], url: e.target.value}
+              setLinks(newLinks)
+            }}
+            required={link.name && link.name.length > 0}
+          />
+        </div>
+      ))}
       <button type="submit" className="btn btn-outline btn-sm place-self-end">
         Save
       </button>
