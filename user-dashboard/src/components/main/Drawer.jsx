@@ -1,8 +1,8 @@
 import Navbar from "./Navbar"
 import Footer from "./Footer"
 import Menu from "./Menu"
-import {Outlet} from "react-router-dom"
-
+import { Outlet } from "react-router-dom"
+import { AuroraBackground } from "@/components/ui/aurora-background";
 const Drawer = () => {
   return (
     <div className="drawer overflow-x-hidden">
@@ -10,7 +10,13 @@ const Drawer = () => {
       <div className="drawer-content min-h-screen flex flex-col">
         {/* Page content here */}
         <Navbar />
-        <Outlet />
+        <main className="flex-1 relative">
+          <AuroraBackground className="min-h-[calc(100vh-6rem)]"> {/* Navbar ve Footer yüksekliğini düşürdük */}
+            <div className="container mx-auto px-4 py-8">
+              <Outlet />
+            </div>
+          </AuroraBackground>
+        </main>
         <Footer />
       </div>
       <div className="drawer-side w-64">

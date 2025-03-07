@@ -1,13 +1,15 @@
 import mainLogo from "/icon.svg"
-import {useState, useEffect} from "react"
-import {clearTokens} from "../../utils/authUtils"
-import {useNavigate, Link} from "react-router-dom"
-import {useAuth} from "../../contexts/AuthContext"
+import { useState, useEffect } from "react"
+import { clearTokens } from "../../utils/authUtils"
+import { useNavigate, Link } from "react-router-dom"
+import { useAuth } from "../../contexts/AuthContext"
+import { Button } from "@/components/ui/button"
+import { TypeAnimation } from "react-type-animation"
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const navigate = useNavigate()
-  const {loggedIn, logout, getUsername} = useAuth()
+  const { loggedIn, logout, getUsername } = useAuth()
   const [username, setUsername] = useState(null)
 
   useEffect(() => {
@@ -26,9 +28,6 @@ const Navbar = () => {
   const loginAction = () => {
     document.getElementById("loginModal").showModal()
   }
-  const signUpAction = () => {
-    document.getElementById("signUpModal").showModal()
-  }
   const logoutAction = () => {
     console.log("Logging out")
     clearTokens()
@@ -37,19 +36,24 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar bg-base-300 text-base-content px-5 shadow-md">
+    <div className="navbar bg-background font-thin font-mono text-xs shadow-md">
       <div className="flex-1">
-        {loggedIn && (
+        {loggedIn && (<>
           <Link to={`https://${username}.webdiaries.me`} target="_blank">
             <img src={mainLogo} className="logo react max-w-12" />
           </Link>
+          <Link to={`https://${username}.webdiaries.me`} target="_blank">
+
+            <TypeAnimation className="ml-5" sequence={[`https://${username}.webdiaries.me`, 1000, "", 1000]} speed={50} repeat={Infinity} />
+          </Link>  </>
         )}
         {!loggedIn && (
-          <Link to="/">
-            <img src={mainLogo} className="logo react max-w-12" />
-          </Link>
+          <TypeAnimation sequence={["write to live", 1000, "live to write", 1000,
+          ]} speed={50} repeat={Infinity} />
         )}
+
       </div>
+
       <div className="flex-none">
         {loggedIn && (
           <div>
@@ -82,12 +86,7 @@ const Navbar = () => {
         )}
         {!loggedIn && (
           <>
-            <a onClick={signUpAction} className="btn btn-ghost text-xl">
-              Sign Up
-            </a>
-            <a onClick={loginAction} className="btn btn-ghost text-xl">
-              Login
-            </a>
+            <Button onClick={loginAction} variant="ghost">LOG IN</Button>
           </>
         )}
       </div>

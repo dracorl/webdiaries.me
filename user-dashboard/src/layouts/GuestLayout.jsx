@@ -1,6 +1,8 @@
 import LoginModal from "../components/modals/LoginModal"
 import SignUpModal from "../components/modals/SignUpModal"
-import Hero from "../components/main/Hero"
+// import Hero from "../components/main/Hero"
+//import AutoPlayingCarousel from "../components/main/AutoPlayingCarousel"
+import Landing from "../components/main/Landing"
 import {useEffect} from "react"
 import {useNavigate} from "react-router-dom"
 import {useAuth} from "../contexts/AuthContext"
@@ -15,7 +17,7 @@ const GuestLayout = ({children}) => {
 
   return (
     <>
-      <Hero />
+      <Landing />
       {children}
       <LoginModal />
       <SignUpModal />
