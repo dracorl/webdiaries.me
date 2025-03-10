@@ -33,7 +33,7 @@ const LoginForm = ({onSubmitSuccess}) => {
   const form = useForm({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: ""
     }
   })
