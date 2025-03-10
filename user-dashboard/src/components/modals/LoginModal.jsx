@@ -1,24 +1,17 @@
+import {DialogContent, DialogHeader, DialogTitle} from "@/components/ui/dialog"
 import LoginForm from "../forms/LoginForm"
+import {useModal} from "../../contexts/ModalContext"
 
 const LoginModal = () => {
+  const {closeModal} = useModal()
   return (
-    <>
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
-
-      <dialog id="loginModal" className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <form method="dialog">
-            <h2 className="text-2xl text-center">Jump In</h2>
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <div className="modal-action justify-center">
-            <LoginForm />
-          </div>
-        </div>
-      </dialog>
-    </>
+    <DialogContent className="sm:max-w-[425px]">
+      <DialogHeader>
+        <DialogTitle>Login</DialogTitle>
+      </DialogHeader>
+      <LoginForm onSubmitSuccess={() => closeModal()} />
+    </DialogContent>
   )
 }
+
 export default LoginModal
