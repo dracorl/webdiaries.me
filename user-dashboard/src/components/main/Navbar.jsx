@@ -6,7 +6,7 @@ import {useAuth} from "../../contexts/AuthContext"
 import {Button} from "@/components/ui/button"
 import {TypeAnimation} from "react-type-animation"
 import {useModal} from "../../contexts/ModalContext"
-import LoginModal from "../modals/LoginModal"
+import LoginForm from "../forms/LoginForm"
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -29,7 +29,7 @@ const Navbar = () => {
   }
 
   const loginAction = () => {
-    openModal(() => <LoginModal />)
+    openModal("Login", "Log in to your account", <LoginForm />)
   }
   const logoutAction = () => {
     console.log("Logging out")

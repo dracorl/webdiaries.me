@@ -1,8 +1,21 @@
-import {useState} from "react"
-import {FaAt, FaKey, FaUser} from "react-icons/fa"
+import {useForm} from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
 import {useMutation, gql} from "@apollo/client"
 import {toast} from "react-toastify"
+import {Button} from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+import {useModal} from "../../contexts/ModalContext"
+import {SignUpFormSchema} from "./Schema"
 
+// GraphQL Mutation
 const CREATE_MUTATION = gql`
   mutation CreateUser($username: String!, $email: String!, $password: String!) {
     createUser(username: $username, email: $email, password: $password) {
@@ -14,27 +27,31 @@ const CREATE_MUTATION = gql`
 `
 
 const SignUpForm = () => {
-  const [email, setEmail] = useState("")
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-
+  const {closeModal} = useModal()
   const [createUser] = useMutation(CREATE_MUTATION)
 
-  const handleSignUp = async e => {
-    e.preventDefault()
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match")
-      return
+  const form = useForm({
+    resolver: zodResolver(SignUpFormSchema),
+    defaultValues: {
+      email: "",
+      username: "",
+      password: "",
+      confirmPassword: ""
     }
+  })
+
+  const onSubmit = async values => {
     try {
       const response = await createUser({
-        variables: {email, username, password}
+        variables: {
+          email: values.email,
+          username: values.username,
+          password: values.password
+        }
       })
+      toast.success("Account created successfully")
+      closeModal()
       console.log("User created:", response.data.createUser)
-      toast.success("User created successfully")
-      document.getElementById("signUpModal").close()
-      document.getElementById("loginModal").showModal()
     } catch (error) {
       console.error(error)
       toast.error(error.message)
@@ -42,71 +59,77 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={handleSignUp}>
-      <div className="grid grid-cols-1 gap-4 mt-4">
-        <div>
-          <label className="input input-bordered flex items-center gap-2">
-            <FaAt className="w-4 h-4 opacity-70 sm:w-4 sm:h-4 sm:opacity-100" />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Email"
-              name="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label className="input input-bordered flex items-center gap-2">
-            <FaUser className="w-4 h-4 opacity-70 sm:w-4 sm:h-4 sm:opacity-100" />
-            <input
-              type="text"
-              className="grow"
-              placeholder="Username"
-              name="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              required={true}
-            />
-          </label>
-        </div>
-        <div>
-          <label className="input input-bordered flex items-center gap-2">
-            <FaKey className="w-4 h-4 opacity-70" />
-            <input
-              type="password"
-              className="grow"
-              placeholder="Password"
-              name="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label className="input input-bordered flex items-center gap-2">
-            <FaKey className="w-4 h-4 opacity-70" />
-            <input
-              type="password"
-              className="grow"
-              placeholder="Confirm Password"
-              name="confirmPassword"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div className="flex justify-evenly">
-          <button type="submit" className="btn btn-primary mr-2">
-            Sign Up
-          </button>
-        </div>
-      </div>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {/* Email Field */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input type="email" placeholder="Email" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Username Field */}
+        <FormField
+          control={form.control}
+          name="username"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Username" {...field} />
+              </FormControl>
+              <FormDescription>
+                Your Webdiaries domain will be: {field.value}.webdiaries.me
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Password Field */}
+        <FormField
+          control={form.control}
+          name="password"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input type="password" placeholder="Password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Confirm Password Field */}
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full">
+          Sign Up
+        </Button>
+      </form>
+    </Form>
   )
 }
 

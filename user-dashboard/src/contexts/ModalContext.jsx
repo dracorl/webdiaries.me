@@ -1,33 +1,50 @@
 import {createContext, useContext, useState} from "react"
-import {Dialog} from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog"
 
 const ModalContext = createContext()
 
 export const ModalProvider = ({children}) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [modalContent, setModalContent] = useState(null)
+  const [modalConfig, setModalConfig] = useState({
+    title: "",
+    description: "",
+    content: null
+  })
 
-  const openModal = ContentComponent => {
-    setModalContent(() => ContentComponent)
+  const openModal = (title, description, ContentComponent) => {
+    setModalConfig({
+      title,
+      description,
+      content: ContentComponent
+    })
     setIsOpen(true)
   }
 
   const closeModal = () => {
     setIsOpen(false)
-    setModalContent(null)
+    setModalConfig({title: "", description: "", content: null})
   }
 
   return (
     <ModalContext.Provider value={{openModal, closeModal}}>
       {children}
 
-      <Dialog
-        open={isOpen}
-        onOpenChange={open => {
-          if (!open) closeModal()
-        }}
-      >
-        {modalContent && modalContent()}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{modalConfig.title}</DialogTitle>
+            {modalConfig.description && (
+              <DialogDescription>{modalConfig.description}</DialogDescription>
+            )}
+          </DialogHeader>
+          {modalConfig.content}
+        </DialogContent>
       </Dialog>
     </ModalContext.Provider>
   )

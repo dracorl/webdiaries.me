@@ -1,4 +1,3 @@
-import SignUpModal from "../components/modals/SignUpModal"
 // import Hero from "../components/main/Hero"
 //import AutoPlayingCarousel from "../components/main/AutoPlayingCarousel"
 import Landing from "../components/main/Landing"
@@ -18,7 +17,6 @@ const GuestLayout = ({children}) => {
     <>
       <Landing />
       {children}
-      <SignUpModal />
     </>
   )
 }

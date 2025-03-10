@@ -1,6 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import BlogCard from "./BlogCard";
+import {Button} from "@/components/ui/button"
+import {motion} from "framer-motion"
+import BlogCard from "./BlogCard"
+import {useModal} from "../../contexts/ModalContext"
+import SignUpForm from "../forms/SignUpForm"
 
 const blogs = [
   {
@@ -9,33 +11,34 @@ const blogs = [
       "Commodore 64'ünüzü Hayata Döndürmek: Adım Adım Tamir Rehberi...",
     date: "Dec 22, 2024",
     readTime: "5 min read",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/9/9d/Commodore-64-Computer-FL.png",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf4071923c224bfbf33503",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9d/Commodore-64-Computer-FL.png",
+    link: "https://enginyuksel.webdiaries.me/blog/67bf4071923c224bfbf33503"
   },
   {
     title: "Yapay Zeka ve Yaratıcılık: Sanatın Yeni Yüzü ve Geleceği",
-    description:
-      "Yapay zeka ve sanat üzerine bir yazı dizisi başlıyor...",
+    description: "Yapay zeka ve sanat üzerine bir yazı dizisi başlıyor...",
     date: "Sep 7, 2024",
     readTime: "7 min read",
-    imageUrl: "https://mediatrend.mediamarkt.com.tr/wp-content/uploads/2024/07/Yapay-Zeka-Nereye-Gidiyor.webp",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf431a923c224bfbf33566",
+    imageUrl:
+      "https://mediatrend.mediamarkt.com.tr/wp-content/uploads/2024/07/Yapay-Zeka-Nereye-Gidiyor.webp",
+    link: "https://enginyuksel.webdiaries.me/blog/67bf431a923c224bfbf33566"
   },
   {
     title: "Elmalı Kek Tarifi",
-    description:
-      "Bir dilim elmalı kek, yanında sıcacık bir çay...",
+    description: "Bir dilim elmalı kek, yanında sıcacık bir çay...",
     date: "Sep 10, 2024",
     readTime: "7 min read",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgTnAnJahD6y399KeOuypkYogZwo_wl6hVPA&s",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf4103923c224bfbf3353f",
-  },
-
-];
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgTnAnJahD6y399KeOuypkYogZwo_wl6hVPA&s",
+    link: "https://enginyuksel.webdiaries.me/blog/67bf4103923c224bfbf3353f"
+  }
+]
 
 export default function Landing() {
-   const signUpAction = () => {
-    document.getElementById("signUpModal").showModal()
+  const {openModal} = useModal()
+  const signUpAction = () => {
+    openModal("Sign Up", "Create an account to start writing", <SignUpForm />)
   }
 
   return (
@@ -44,27 +47,30 @@ export default function Landing() {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="flex flex-col items-center text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.8}}
           >
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Share Your Thoughts 
+              Share Your Thoughts
               <span className="text-blue-600 block mt-2">Freely</span>
             </h1>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            transition={{delay: 0.5}}
             className="mb-12"
           >
             <WritingHandSVG className="w-64 h-64 md:w-80 md:h-80" />
           </motion.div>
 
           <div className="space-y-4">
-            <Button onClick={signUpAction} className="relative z-10 text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700">
+            <Button
+              onClick={signUpAction}
+              className="relative z-10 text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700"
+            >
               Start for Free
             </Button>
             <p className="text-gray-600 text-sm mt-2">
@@ -102,16 +108,16 @@ export default function Landing() {
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {blogs.map((blog, item) => (
-            <BlogCard key={item} {...blog}/>
+            <BlogCard key={item} {...blog} />
           ))}
         </div>
       </section>
     </div>
-  );
+  )
 }
 
 // SVG Components
-const WritingHandSVG = ({ className }) => (
+const WritingHandSVG = ({className}) => (
   <svg
     viewBox="0 0 24 24"
     className={className}
@@ -123,14 +129,14 @@ const WritingHandSVG = ({ className }) => (
       d="M12 19.5V12M9 17L3 11L10 3L15 5.5M21 11L15 5.5M15 5.5L12 8"
       strokeLinecap="round"
       strokeLinejoin="round"
-      initial={{ pathLength: 0 }}
-      animate={{ pathLength: 1 }}
-      transition={{ duration: 2, repeat: Infinity }}
+      initial={{pathLength: 0}}
+      animate={{pathLength: 1}}
+      transition={{duration: 2, repeat: Infinity}}
     />
   </svg>
-);
+)
 
-const PenSVG = ({ className }) => (
+const PenSVG = ({className}) => (
   <svg
     viewBox="0 0 24 24"
     className={className}
@@ -144,9 +150,9 @@ const PenSVG = ({ className }) => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)
 
-const BlogSVG = ({ className }) => (
+const BlogSVG = ({className}) => (
   <svg
     viewBox="0 0 24 24"
     className={className}
@@ -160,9 +166,9 @@ const BlogSVG = ({ className }) => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)
 
-const AnalyticsSVG = ({ className }) => (
+const AnalyticsSVG = ({className}) => (
   <svg
     viewBox="0 0 24 24"
     className={className}
@@ -176,16 +182,16 @@ const AnalyticsSVG = ({ className }) => (
       strokeLinejoin="round"
     />
   </svg>
-);
+)
 
 // Reusable Components
-const FeatureCard = ({ icon, title, description }) => (
+const FeatureCard = ({icon, title, description}) => (
   <motion.div
-    whileHover={{ scale: 1.05 }}
+    whileHover={{scale: 1.05}}
     className="bg-white/30 backdrop-blur-md p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-white/20"
   >
     <div className="text-blue-600 mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>
     <p className="text-gray-600">{description}</p>
   </motion.div>
-);
+)

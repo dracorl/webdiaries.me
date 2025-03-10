@@ -8,13 +8,14 @@ import {Button} from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
+  FormLabel,
   FormField,
   FormItem,
   FormMessage
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
 import {LoginFormSchema} from "./Schema"
+import {useModal} from "../../contexts/ModalContext"
 
 const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -27,7 +28,7 @@ const LOGIN_MUTATION = gql`
 
 const LoginForm = ({onSubmitSuccess}) => {
   const {login} = useAuth()
-
+  const {closeModal} = useModal()
   const [loginMutation] = useMutation(LOGIN_MUTATION)
 
   const form = useForm({
@@ -45,7 +46,7 @@ const LoginForm = ({onSubmitSuccess}) => {
         response.data.login.accessToken,
         response.data.login.refreshToken
       )
-      onSubmitSuccess?.()
+      closeModal()
       console.log("type of onSubmitSuccess", typeof onSubmitSuccess)
       login()
     } catch (error) {
@@ -56,16 +57,16 @@ const LoginForm = ({onSubmitSuccess}) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="email"
           render={({field}) => (
             <FormItem>
+              <FormLabel className="font-semibold">Email</FormLabel>
               <FormControl>
                 <Input placeholder="Email" {...field} />
               </FormControl>
-              <FormDescription>Your Email will be kept private</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -75,18 +76,16 @@ const LoginForm = ({onSubmitSuccess}) => {
           name="password"
           render={({field}) => (
             <FormItem>
+              <FormLabel className="font-semibold">Password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="Password" {...field} />
               </FormControl>
-              <FormDescription>
-                Your Password will be hashed and kept private
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button className="float-right" type="submit">
+        <Button className="w-full" type="submit">
           Submit
         </Button>
       </form>
