@@ -1,4 +1,3 @@
-import Theme from "../components/main/Theme"
 import BioForm from "../components/forms/BioForm"
 import EmailForm from "../components/forms/EmailForm"
 import PasswordForm from "../components/forms/PasswordForm"
@@ -8,10 +7,10 @@ import Tabs from "../components/main/Tabs"
 const SettingsPage = () => {
   return (
     <div className="flex-1 mt-1">
-      <div role="tablist" className="tabs tabs-bordered justify-center w-full">
-        <Tabs name="tab_settings" ariaLabel="Theme" defaultChecked={true}>
-          <Theme />
-        </Tabs>
+      <div
+        role="tablist"
+        className="relative tabs tabs-bordered justify-center w-full"
+      >
         <Tabs name="tab_settings" ariaLabel="Bio" defaultChecked={false}>
           <BioForm />
         </Tabs>
