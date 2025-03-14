@@ -3,6 +3,9 @@ import {motion} from "framer-motion"
 import BlogCard from "./BlogCard"
 import {useModal} from "../../contexts/ModalContext"
 import SignUpForm from "../forms/SignUpForm"
+import {useAuth} from "@/contexts/AuthContext"
+import {useEffect} from "react"
+import {useNavigate} from "react-router-dom"
 
 const blogs = [
   {
@@ -36,6 +39,12 @@ const blogs = [
 ]
 
 export default function Landing() {
+  const {loggedIn} = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (loggedIn) navigate("/posts")
+  }, [loggedIn])
   const {openModal} = useModal()
   const signUpAction = () => {
     openModal("Sign Up", "Create an account to start writing", <SignUpForm />)

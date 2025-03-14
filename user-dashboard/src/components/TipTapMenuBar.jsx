@@ -1,9 +1,5 @@
 import {useCurrentEditor} from "@tiptap/react"
 
-const savePostAction = modalName => {
-  document.getElementById(modalName).showModal()
-}
-
 const TipTapMenuBar = ({openModal}) => {
   const {editor} = useCurrentEditor()
 
@@ -256,7 +252,7 @@ const TipTapMenuBar = ({openModal}) => {
           redo
         </button>
         <button
-          onClick={() => savePostAction(openModal)}
+          onClick={() => openModal()}
           className="m-0.5 btn btn-outline btn-primary btn-sm"
         >
           Save

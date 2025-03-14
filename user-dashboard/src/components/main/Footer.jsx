@@ -3,7 +3,7 @@ import {FaGithub, FaTwitter, FaInstagram, FaHeart} from "react-icons/fa"
 
 const Footer = () => {
   return (
-    <footer className="footer p-10 bg-primary text-neutral-content flex justify-between ">
+    <footer className="shadow-[0_-5px_10px_rgba(0,0,0,0.2)] footer p-10 bg-secondary text-neutral-content flex justify-between ">
       <nav>
         <div className="text-center">
           Made with <FaHeart className="lg:ml-1 inline text-red-600" />

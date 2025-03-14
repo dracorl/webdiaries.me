@@ -1,48 +1,72 @@
 import {FaPlus, FaList, FaChartBar, FaCog, FaSignInAlt} from "react-icons/fa"
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
+import {Button} from "@/components/ui/button"
+import {useAuth} from "@/contexts/AuthContext"
 
-const Menu = () => {
-  const drawerClose = () => {
-    document.getElementById("my-drawer").checked = false
+const Menu = ({onOpenChange}) => {
+  const {logout} = useAuth()
+  const navigate = useNavigate()
+
+  const handleLinkClick = () => {
+    onOpenChange(false) // Drawer'ı kapat
+  }
+
+  const handleLogout = () => {
+    onOpenChange(false)
+    logout()
+    navigate("/")
   }
 
   return (
-    <>
-      <Link
-        onClick={drawerClose}
-        to="/create"
-        className="btn btn-neutral btn-block"
-      >
-        <FaPlus className="text-neutral-content inline text-lg mb-1 mr-1" />
-        Create New Post
-      </Link>
-      <ul className="menu bg-base-200 text-base-content w-56 rounded-box">
-        <li>
-          <Link onClick={drawerClose} to="/posts">
-            <FaList className="inline text-lg mb-1 mr-1" />
-            Blogs Posts
+    <div className="space-y-4 mx-2">
+      <Button asChild className="w-2xl" onClick={handleLinkClick}>
+        <Link to="/create">
+          <FaPlus className="text-lg mr-2" />
+          Create New Post
+        </Link>
+      </Button>
+
+      <div className="text-foreground w-56 rounded-lg p-2 space-y-1">
+        <Button
+          asChild
+          variant="ghost"
+          className="w-full justify-start"
+          onClick={handleLinkClick}
+        >
+          <Link to="/posts">
+            <FaList className="text-lg mr-2" />
+            Blog Posts
           </Link>
-        </li>
-        <li>
-          <a>
-            <FaChartBar className="inline text-lg mb-1 mr-1" />
-            Statics
-          </a>
-        </li>
-        <li>
-          <Link onClick={drawerClose} to="/settings">
-            <FaCog className="inline text-lg mb-1 mr-1" />
+        </Button>
+
+        <Button variant="ghost" className="w-full justify-start">
+          <FaChartBar className="text-lg mr-2" />
+          Statistics
+        </Button>
+
+        <Button
+          asChild
+          variant="ghost"
+          className="w-full justify-start"
+          onClick={handleLinkClick}
+        >
+          <Link to="/settings">
+            <FaCog className="text-lg mr-2" />
             Settings
           </Link>
-        </li>
-        <li>
-          <a>
-            <FaSignInAlt className="inline text-lg mb-1 mr-1" />
-            Logout
-          </a>
-        </li>
-      </ul>
-    </>
+        </Button>
+
+        <Button
+          variant="ghost"
+          className="w-full justify-start"
+          onClick={handleLogout}
+        >
+          <FaSignInAlt className="text-lg mr-2" />
+          Logout
+        </Button>
+      </div>
+    </div>
   )
 }
+
 export default Menu

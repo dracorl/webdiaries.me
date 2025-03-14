@@ -1,14 +1,20 @@
 import {useState} from "react"
 import TipTap from "../components/TipTap"
-import SavePostModal from "../components/modals/SavePostModal"
+import {useModal} from "../contexts/ModalContext"
+import SavePostForm from "../components/forms/SavePostForm"
 
 const CreateBlogPost = () => {
   const [editorContent, setEditorContent] = useState("")
-  const openModal = "savePostModal"
+  const {openModal} = useModal()
+  const handleOpenSaveModal = () => {
+    openModal("Save Post", "", <SavePostForm editorContent={editorContent} />)
+  }
   return (
     <div className="mx-2 my-4 divide-y min-h-screen">
-      <TipTap openModal={openModal} setEditorContent={setEditorContent} />
-      <SavePostModal editorContent={editorContent} />
+      <TipTap
+        openModal={handleOpenSaveModal}
+        setEditorContent={setEditorContent}
+      />
     </div>
   )
 }

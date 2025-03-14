@@ -2,11 +2,13 @@ import {useState, useEffect, useCallback} from "react"
 import DataTable from "react-data-table-component"
 import {useLazyQuery, gql} from "@apollo/client"
 import {useNavigate} from "react-router-dom"
-import EditContentModal from "./modals/EditContentModal"
-import DeleteModal from "./modals/DeleteModal"
-import TagsModal from "./modals/TagsModal"
-import PublishedModal from "./modals/PublishedModal"
+import {Button} from "@/components/ui/button"
+import {Switch} from "@/components/ui/switch"
+import PublishForm from "@/components/forms/PublishForm"
 import Loading from "./main/Loading"
+import TagsForm from "@/components/forms/TagsForm"
+import DeleteForm from "./forms/DeleteForm"
+import {useModal} from "@/contexts/ModalContext"
 
 const BLOGS_QUERY = gql`
   query Blogs($limit: Int!, $offset: Int!) {
@@ -32,6 +34,7 @@ const formatDate = timestamp =>
   })
 
 const DataTableWithPagination = () => {
+  const {openModal} = useModal()
   const [data, setData] = useState([])
   const [totalRows, setTotalRows] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
@@ -71,47 +74,58 @@ const DataTableWithPagination = () => {
     {
       name: "Published",
       cell: row => (
-        <input
-          type="checkbox"
-          className="toggle"
-          checked={checkedStates[row.id] || false}
-          onChange={() => {}} //dummy function react things
-          onClick={e => {
-            e.preventDefault()
-            setId(row.id)
-            document.getElementById("publishedModal").showModal()
-          }}
-        />
+        <div className="flex justify-center">
+          <Switch
+            checked={checkedStates[row.id]}
+            onCheckedChange={() => {
+              setId(row.id)
+              openModal(
+                "Publish Post",
+                <PublishForm
+                  blogId={row.id}
+                  checkedStates={checkedStates}
+                  setCheckedStates={setCheckedStates}
+                />
+              )
+            }}
+            className="data-[state=checked]:bg-green-500"
+          />
+        </div>
       )
     },
     {
       name: "Actions",
       cell: row => (
-        <div className="join join-vertical lg:join-horizontal">
-          <button
+        <div className="flex gap-2">
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => navigate(`/posts/${row.id}/edit`)}
-            className="btn-xs btn join-item btn-primary"
           >
             Edit
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => {
               setId(row.id)
-              document.getElementById("tagsModal").showModal()
+              openModal("Manage Tags", <TagsForm blogId={row.id} />)
             }}
-            className="btn-xs btn join-item btn-warning"
           >
             Tags
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
             onClick={() => {
-              setId(row.id)
-              document.getElementById("deleteModal").showModal()
+              openModal(
+                "Delete Post",
+                <DeleteForm blogId={row.id} onSuccess={deleteAction} />
+              )
             }}
-            className="btn-xs btn join-item btn-error"
           >
             Delete
-          </button>
+          </Button>
         </div>
       )
     }
@@ -127,12 +141,10 @@ const DataTableWithPagination = () => {
       setCheckedStates(defaultCheckStates)
       setTotalRows(data.blogs.totalCount)
     },
-    fetchPolicy: "network-only" // This ensures the query is always sent to the server
+    fetchPolicy: "network-only"
   })
 
   const fetchBlogs = useCallback(async () => {
-    console.log("Fetching blogs...")
-
     const offset = (currentPage - 1) * pageSize
     blogs({variables: {limit: pageSize, offset: offset}})
   }, [blogs, currentPage, pageSize])
@@ -140,6 +152,7 @@ const DataTableWithPagination = () => {
   const deleteAction = async () => {
     fetchBlogs()
   }
+
   const handlePageChange = page => {
     setCurrentPage(page)
     fetchBlogs()
@@ -156,31 +169,21 @@ const DataTableWithPagination = () => {
   }, [fetchBlogs])
 
   return (
-    <>
-      <DataTable
-        theme={userPrefersDark ? "dark" : "default"}
-        title="Blog Posts"
-        columns={columns}
-        data={data}
-        progressPending={loading}
-        progressComponent={<Loading />}
-        pagination
-        paginationServer
-        paginationDefaultPage={currentPage}
-        paginationPerPage={pageSize}
-        paginationTotalRows={totalRows}
-        onChangeRowsPerPage={handlePerRowsChange}
-        onChangePage={handlePageChange}
-      />
-      <EditContentModal blogId={id} />
-      <DeleteModal blogId={id} deleteAction={deleteAction} />
-      <TagsModal blogId={id} />
-      <PublishedModal
-        blogId={id}
-        checkedStates={checkedStates}
-        setCheckedStates={setCheckedStates}
-      />
-    </>
+    <DataTable
+      theme={userPrefersDark ? "dark" : "default"}
+      title="Blog Posts"
+      columns={columns}
+      data={data}
+      progressPending={loading}
+      progressComponent={<Loading />}
+      pagination
+      paginationServer
+      paginationDefaultPage={currentPage}
+      paginationPerPage={pageSize}
+      paginationTotalRows={totalRows}
+      onChangeRowsPerPage={handlePerRowsChange}
+      onChangePage={handlePageChange}
+    />
   )
 }
 

@@ -1,6 +1,18 @@
-import {useState} from "react"
+import {useForm} from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
 import {useMutation, gql} from "@apollo/client"
 import {toast} from "react-toastify"
+import {Button} from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+
+import {EmailFormSchema} from "./Schema"
 
 const FORGOT_PASSWORD_MUTATION = gql`
   mutation ForgotToken($email: String!) {
@@ -9,40 +21,42 @@ const FORGOT_PASSWORD_MUTATION = gql`
 `
 
 const ForgotPasswordForm = () => {
-  const [email, setEmail] = useState("")
   const [forgotToken] = useMutation(FORGOT_PASSWORD_MUTATION)
 
-  const handleSave = async e => {
-    e.preventDefault()
+  const form = useForm({
+    resolver: zodResolver(EmailFormSchema),
+    defaultValues: {
+      email: ""
+    }
+  })
+
+  const onSubmit = async values => {
     try {
-      await forgotToken({
-        variables: {
-          email
-        }
-      })
-      toast.success("Email sent for password reset successfully")
+      await forgotToken({variables: {email: values.email}})
+      toast.success("Email sent. Check your inbox.")
     } catch (error) {
-      console.error(error)
       toast.error(error.message)
     }
   }
 
   return (
-    <form onSubmit={handleSave} className="flex-col flex gap-3 items-center">
-      <div className="text-lg self-center">Email</div>
-      <input
-        type="email"
-        placeholder="Email"
-        className="input input-bordered w-full max-w-xs"
-        onChange={e => setEmail(e.target.value)}
-        value={email || ""}
-        required
-      />
-
-      <button type="submit" className="btn btn-outline btn-sm">
-        Send Reset Password Request
-      </button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Send</Button>
+      </form>
+    </Form>
   )
 }
 export default ForgotPasswordForm

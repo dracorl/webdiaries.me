@@ -2,8 +2,9 @@ import {useQuery, gql} from "@apollo/client"
 import {useState} from "react"
 import TipTap from "../components/TipTap"
 import {useParams} from "react-router-dom"
-import EditContentModal from "../components/modals/EditContentModal"
 import Loading from "../components/main/Loading"
+import {useModal} from "../contexts/ModalContext"
+import EditPostForm from "../components/forms/EditPostForm"
 
 const CONTENT_QUERY = gql`
   query Blog($blogId: ID!) {
@@ -23,6 +24,7 @@ const CONTENT_QUERY = gql`
 const EditContentPage = () => {
   const [editorContent, setEditorContent] = useState("")
   const {blogId} = useParams()
+  const {openModal} = useModal()
   const {data, loading} = useQuery(CONTENT_QUERY, {
     variables: {blogId},
     fetchPolicy: "network-only", // "cache-first" is the default,
@@ -30,24 +32,26 @@ const EditContentPage = () => {
       setEditorContent(data.blog.content)
     }
   })
-  const openModal = "editContentModal"
+  const handleOpenSaveModal = () => {
+    openModal(
+      "Edit Blog Post",
+      "",
+      <EditPostForm
+        blogId={blogId}
+        currentTitle={data.blog.title}
+        currentTags={data.blog.tags}
+        editorContent={editorContent}
+      />
+    )
+  }
 
   if (!loading && data) {
-    const currentTags = data.blog.tags
-      ? data.blog.tags.map(tag => ({value: tag.id, label: tag.name}))
-      : []
     return (
       <div className="mx-2 my-4 divide-y min-h-screen">
         <TipTap
-          openModal={openModal}
+          openModal={handleOpenSaveModal}
           editorContent={data.blog.content}
           setEditorContent={setEditorContent}
-        />
-        <EditContentModal
-          updateBlogId={data.blog.id}
-          currentTags={currentTags}
-          currentTitle={data.blog.title}
-          editorContent={editorContent}
         />
       </div>
     )

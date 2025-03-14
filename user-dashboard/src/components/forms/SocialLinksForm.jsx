@@ -1,6 +1,18 @@
-import {useEffect, useState} from "react"
+import {useForm, useFieldArray} from "react-hook-form"
 import {useQuery, useMutation, gql} from "@apollo/client"
 import {toast} from "react-toastify"
+import {Button} from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+import {zodResolver} from "@hookform/resolvers/zod"
+import {SocialLinksFormSchema} from "./Schema"
+import {useEffect} from "react"
 
 const GET_USER_LINKS_QUERY = gql`
   query User {
@@ -14,7 +26,7 @@ const GET_USER_LINKS_QUERY = gql`
 `
 
 const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUser($links: [LinkInput]) {
+  mutation UpdateUser($links: [LinkInput!]!) {
     updateUser(links: $links) {
       id
     }
@@ -22,71 +34,104 @@ const UPDATE_USER_MUTATION = gql`
 `
 
 const SocialLinksForm = () => {
-  const {data} = useQuery(GET_USER_LINKS_QUERY)
-  const [links, setLinks] = useState([{name: "", url: ""}])
+  const {data} = useQuery(GET_USER_LINKS_QUERY, {
+    fetchPolicy: "network-only"
+  })
   const [updateUser] = useMutation(UPDATE_USER_MUTATION)
 
-  useEffect(() => {
-    if (data?.user?.links)
-      // eslint-disable-next-line no-unused-vars
-      setLinks(data.user.links.map(({__typename, ...link}) => link))
-  }, [data])
+  const form = useForm({
+    resolver: zodResolver(SocialLinksFormSchema),
+    defaultValues: {
+      links: [{name: "", url: ""}]
+    }
+  })
 
-  const handleSave = async e => {
-    e.preventDefault()
-    console.log({
-      variables: {
-        links
-      }
-    })
+  const {fields, append, remove} = useFieldArray({
+    control: form.control,
+    name: "links"
+  })
+
+  useEffect(() => {
+    if (data?.user?.links) {
+      const cleanedLinks = data.user.links.map(({__typename, ...rest}) => rest)
+      form.reset({links: cleanedLinks})
+    }
+  }, [data, form.reset])
+
+  const onSubmit = async values => {
     try {
-      await updateUser({
-        variables: {
-          links
-        }
-      })
+      await updateUser({variables: {links: values.links}})
       toast.success("Links updated successfully")
     } catch (error) {
-      console.error(error)
       toast.error(error.message)
     }
   }
 
   return (
-    <form onSubmit={handleSave} className="flex-col flex gap-3">
-      <div className="text-lg self-center">Social Links</div>
-      {links.map((link, index) => (
-        <div key={index} className="join">
-          <input
-            type="text"
-            className="input input-bordered join-item"
-            placeholder="Name"
-            value={link.name || ""}
-            onChange={e => {
-              let newLinks = [...links]
-              newLinks[index] = {...newLinks[index], name: e.target.value}
-              setLinks(newLinks)
-            }}
-            required={link.url && link.url.length > 0}
-          />
-          <input
-            type="url"
-            className="input input-bordered join-item"
-            placeholder="Social Media"
-            value={link.url || ""}
-            onChange={e => {
-              let newLinks = [...links]
-              newLinks[index] = {...newLinks[index], url: e.target.value}
-              setLinks(newLinks)
-            }}
-            required={link.name && link.name.length > 0}
-          />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {fields.map((field, index) => (
+          <div key={field.id} className="flex flex-col md:flex-row gap-4">
+            {/* Platform Adı */}
+            <FormField
+              control={form.control}
+              name={`links.${index}.name`}
+              render={({field}) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input
+                      placeholder="Platform name (e.g. GitHub)"
+                      {...field}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* URL */}
+            <FormField
+              control={form.control}
+              name={`links.${index}.url`}
+              render={({field}) => (
+                <FormItem className="flex-1">
+                  <FormControl>
+                    <Input
+                      placeholder="URL (e.g. https://github.com/username)"
+                      {...field}
+                      className="w-full"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => remove(index)}
+              className="mt-2 md:mt-0"
+            >
+              Remove
+            </Button>
+          </div>
+        ))}
+
+        <div className="flex gap-4">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => append({name: "", url: ""})}
+          >
+            Add
+          </Button>
+          <Button type="submit">Save</Button>
         </div>
-      ))}
-      <button type="submit" className="btn btn-outline btn-sm place-self-end">
-        Save
-      </button>
-    </form>
+      </form>
+    </Form>
   )
 }
+
 export default SocialLinksForm

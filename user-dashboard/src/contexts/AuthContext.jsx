@@ -1,6 +1,6 @@
 // AuthContext.js
 import {createContext, useContext, useState} from "react"
-import {isLoggedIn, getUsername} from "../utils/authUtils"
+import {isLoggedIn, getUsername, clearTokens} from "../utils/authUtils"
 
 const AuthContext = createContext()
 
@@ -14,6 +14,7 @@ const AuthProvider = ({children}) => {
 
   const logout = () => {
     setLoggedIn(false)
+    clearTokens()
   }
 
   return (
