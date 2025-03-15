@@ -6,16 +6,19 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "./src/lib/utils.js"],
   theme: {
     extend: {
+      transitionProperty: {
+        "transform-opacity": "transform, opacity"
+      },
       animation: {
-        aurora: "aurora 60s linear infinite"
+        aurora: "aurora 45s linear infinite"
       },
       keyframes: {
         aurora: {
-          from: {
-            backgroundPosition: "50% 50%, 50% 50%"
+          "0%": {
+            backgroundPosition: "50% 0%, 50% 50%"
           },
-          to: {
-            backgroundPosition: "350% 50%, 350% 50%"
+          "100%": {
+            backgroundPosition: "250% 0%, 250% 50%"
           }
         }
       },
