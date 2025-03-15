@@ -34,7 +34,7 @@ const Navbar = ({onDrawerOpen}) => {
   return (
     <header className="shadow-md flex items-center justify-between w-full h-16 px-4 bg-background border-b">
       <div className="flex items-center gap-2 md:gap-4 flex-1">
-        {loggedIn && (
+        {loggedIn && username && (
           <Link
             to={`https://${username}.webdiaries.me`}
             target="_blank"
