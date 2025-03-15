@@ -1,6 +1,18 @@
-import {useEffect, useState} from "react"
+import {useForm} from "react-hook-form"
+import {zodResolver} from "@hookform/resolvers/zod"
 import {useQuery, useMutation, gql} from "@apollo/client"
 import {toast} from "react-toastify"
+import {Button} from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage
+} from "@/components/ui/form"
+import {Input} from "@/components/ui/input"
+import {EmailFormSchema} from "./Schema"
+import {useEffect} from "react"
 
 const GET_USER_EMAIL_QUERY = gql`
   query User {
@@ -11,7 +23,7 @@ const GET_USER_EMAIL_QUERY = gql`
 `
 
 const UPDATE_USER_MUTATION = gql`
-  mutation UpdateUser($email: String) {
+  mutation UpdateUser($email: String!) {
     updateUser(email: $email) {
       id
     }
@@ -20,44 +32,50 @@ const UPDATE_USER_MUTATION = gql`
 
 const EmailForm = () => {
   const {data} = useQuery(GET_USER_EMAIL_QUERY)
-  const [email, setEmail] = useState(null)
   const [updateUser] = useMutation(UPDATE_USER_MUTATION)
 
-  useEffect(() => {
-    if (data?.user?.email) setEmail(data?.user?.email)
-  }, [data])
+  const form = useForm({
+    resolver: zodResolver(EmailFormSchema),
+    defaultValues: {
+      email: data?.user?.email || ""
+    }
+  })
 
-  const handleSave = async e => {
-    e.preventDefault()
+  useEffect(() => {
+    if (data?.user?.email) {
+      form.reset({email: data.user.email})
+    }
+  }, [data, form.reset])
+
+  const onSubmit = async values => {
     try {
-      await updateUser({
-        variables: {
-          email
-        }
-      })
+      await updateUser({variables: {email: values.email}})
       toast.success("Email updated successfully")
     } catch (error) {
-      console.error(error)
       toast.error(error.message)
     }
   }
 
   return (
-    <form onSubmit={handleSave} className="flex-col flex gap-3">
-      <div className="text-lg self-center">Email</div>
-      <input
-        type="email"
-        placeholder="Email"
-        className="input input-bordered w-full max-w-xs"
-        onChange={e => setEmail(e.target.value)}
-        value={email || ""}
-        required
-      />
-
-      <button type="submit" className="btn btn-outline btn-sm place-self-end">
-        Update Mail
-      </button>
-    </form>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({field}) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button className="w-full" type="submit">
+          Update
+        </Button>
+      </form>
+    </Form>
   )
 }
 export default EmailForm

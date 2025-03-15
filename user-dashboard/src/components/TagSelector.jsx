@@ -2,6 +2,7 @@ import {useCallback} from "react"
 import {ReactTags} from "react-tag-autocomplete"
 import "../autocomplete.css"
 import {useQuery, useMutation, gql} from "@apollo/client"
+import {toast} from "react-toastify"
 
 const TAGS_QUERY = gql`
   query Tags {
@@ -12,43 +13,60 @@ const TAGS_QUERY = gql`
   }
 `
 
-const CRETAE_TAG_MUTATION = gql`
-  mutation Mutation($name: String!) {
+const CREATE_TAG_MUTATION = gql`
+  mutation CreateTag($name: String!) {
     createTag(name: $name) {
       name
       id
     }
   }
 `
-const TagSelector = ({selected, setSelected}) => {
-  const {data} = useQuery(TAGS_QUERY)
-  const [createTag] = useMutation(CRETAE_TAG_MUTATION)
 
-  const suggestions = data
+const TagSelector = ({selected, onSelect}) => {
+  // Changed prop to onSelect
+  const {data} = useQuery(TAGS_QUERY)
+  const [createTag] = useMutation(CREATE_TAG_MUTATION)
+
+  const suggestions = data?.tags
     ? data.tags.map(tag => ({value: tag.id, label: tag.name}))
     : []
 
-  const onAdd = useCallback(
+  const handleAdd = useCallback(
     async newTag => {
-      if (newTag.value === newTag.label) {
-        try {
-          const response = await createTag({variables: {name: newTag.label}})
-          newTag.value = response.data.createTag.id
-          newTag.label = response.data.createTag.name
-        } catch (error) {
-          console.error(error)
+      try {
+        // Check if tag already exists
+        const existingTag = suggestions.find(t => t.label === newTag.label)
+
+        if (existingTag) {
+          onSelect([...selected, existingTag])
+          return
         }
+
+        // Create new tag if it doesn't exist
+        const response = await createTag({
+          variables: {name: newTag.label}
+        })
+
+        const createdTag = {
+          value: response.data.createTag.id,
+          label: response.data.createTag.name
+        }
+
+        onSelect([...selected, createdTag])
+      } catch (error) {
+        console.error("Tag creation failed:", error)
+        toast.error("Failed to create new tag")
       }
-      setSelected([...selected, newTag])
     },
-    [selected] // eslint-disable-line react-hooks/exhaustive-deps
+    [selected, onSelect, suggestions, createTag]
   )
 
-  const onDelete = useCallback(
+  const handleDelete = useCallback(
     tagIndex => {
-      setSelected(selected.filter((_, i) => i !== tagIndex))
+      const newTags = selected.filter((_, i) => i !== tagIndex)
+      onSelect(newTags)
     },
-    [selected] // eslint-disable-line react-hooks/exhaustive-deps
+    [selected, onSelect]
   )
 
   return (
@@ -56,9 +74,9 @@ const TagSelector = ({selected, setSelected}) => {
       labelText="Select tags"
       selected={selected}
       suggestions={suggestions}
-      onAdd={onAdd}
+      onAdd={handleAdd}
+      onDelete={handleDelete}
       allowNew={true}
-      onDelete={onDelete}
       noOptionsText="No matching tags"
       required
     />

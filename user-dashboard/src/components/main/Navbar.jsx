@@ -1,14 +1,17 @@
 import mainLogo from "/icon.svg"
 import {useState, useEffect} from "react"
-import {clearTokens} from "../../utils/authUtils"
 import {useNavigate, Link} from "react-router-dom"
 import {useAuth} from "../../contexts/AuthContext"
+import {Button} from "@/components/ui/button"
+import {TypeAnimation} from "react-type-animation"
+import {useModal} from "../../contexts/ModalContext"
+import LoginForm from "../forms/LoginForm"
 
-const Navbar = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+const Navbar = ({onDrawerOpen}) => {
   const navigate = useNavigate()
   const {loggedIn, logout, getUsername} = useAuth()
   const [username, setUsername] = useState(null)
+  const {openModal} = useModal()
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -19,50 +22,58 @@ const Navbar = () => {
     fetchUsername()
   }, [getUsername])
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen)
+  const loginAction = () => {
+    openModal("Login", "Log in to your account", <LoginForm />)
   }
 
-  const loginAction = () => {
-    document.getElementById("loginModal").showModal()
-  }
-  const signUpAction = () => {
-    document.getElementById("signUpModal").showModal()
-  }
   const logoutAction = () => {
-    console.log("Logging out")
-    clearTokens()
     logout()
     navigate("/")
   }
 
   return (
-    <div className="navbar bg-base-300 text-base-content px-5 shadow-md">
-      <div className="flex-1">
-        {loggedIn && (
-          <Link to={`https://${username}.webdiaries.me`} target="_blank">
-            <img src={mainLogo} className="logo react max-w-12" />
+    <header className="shadow-md flex items-center justify-between w-full h-16 px-4 bg-background border-b">
+      <div className="flex items-center gap-2 md:gap-4 flex-1">
+        {loggedIn && username && (
+          <Link
+            to={`https://${username}.webdiaries.me`}
+            target="_blank"
+            className="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity"
+          >
+            <img
+              src={mainLogo}
+              className="w-8 h-8 md:w-12 md:h-12 object-contain"
+              alt="Website Logo"
+            />
+            <TypeAnimation
+              className="text-xs md:text-sm font-mono max-w-[100px] md:max-w-none truncate"
+              sequence={[`https://${username}.webdiaries.me`, 1000, "", 1000]}
+              speed={50}
+              repeat={Infinity}
+            />
           </Link>
         )}
         {!loggedIn && (
-          <Link to="/">
-            <img src={mainLogo} className="logo react max-w-12" />
-          </Link>
+          <TypeAnimation
+            sequence={["write to live", 1000, "live to write", 1000]}
+            speed={50}
+            repeat={Infinity}
+            className="text-xs md:text-sm font-mono"
+          />
         )}
       </div>
-      <div className="flex-none">
+
+      <div className="flex items-center gap-2">
         {loggedIn && (
-          <div>
-            <a onClick={logoutAction} className="btn btn-ghost text-xl">
-              Log Out
-            </a>
-            <label
-              tabIndex={0}
-              role="label"
-              onClick={toggleSidebar}
-              htmlFor="my-drawer"
-              className="btn btn-ghost btn-circle"
+          <>
+            <Button
+              variant="ghost"
+              onClick={logoutAction}
+              className="font-mono text-xs px-2 md:px-4"
             >
+              <span className="hidden md:inline">Log Out</span>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={onDrawerOpen}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -77,21 +88,21 @@ const Navbar = () => {
                   d="M4 6h16M4 12h16M4 18h7"
                 />
               </svg>
-            </label>
-          </div>
-        )}
-        {!loggedIn && (
-          <>
-            <a onClick={signUpAction} className="btn btn-ghost text-xl">
-              Sign Up
-            </a>
-            <a onClick={loginAction} className="btn btn-ghost text-xl">
-              Login
-            </a>
+            </Button>
           </>
         )}
+        {!loggedIn && (
+          <Button
+            variant="ghost"
+            onClick={loginAction}
+            className="font-mono text-xs px-2 md:px-4"
+          >
+            LOG IN
+          </Button>
+        )}
       </div>
-    </div>
+    </header>
   )
 }
+
 export default Navbar

@@ -14,17 +14,19 @@ import {Input} from "@/components/ui/input"
 import {Switch} from "@/components/ui/switch"
 import TagSelector from "../TagSelector"
 import {zodResolver} from "@hookform/resolvers/zod"
-import {SavePostFormSchema} from "./Schema"
-import {useModal} from "../../contexts/ModalContext"
+import {EditPostFormSchema} from "./Schema"
+import {useModal} from "@/contexts/ModalContext"
 
-const CREATE_BLOG_MUTATION = gql`
-  mutation CreateBlog(
-    $title: String!
-    $content: String!
+const UPDATE_BLOG_MUTATION = gql`
+  mutation UpdateBlog(
+    $id: ID!
+    $title: String
+    $content: String
     $tags: [ID]
-    $published: Boolean!
+    $published: Boolean
   ) {
-    createBlog(
+    updateBlog(
+      id: $id
       title: $title
       content: $content
       tags: $tags
@@ -35,24 +37,24 @@ const CREATE_BLOG_MUTATION = gql`
   }
 `
 
-const SavePostForm = ({editorContent}) => {
+const EditPostForm = ({blogId, currentTitle, currentTags, editorContent}) => {
   const navigate = useNavigate()
-  const [createBlog] = useMutation(CREATE_BLOG_MUTATION)
+  const [updateBlog] = useMutation(UPDATE_BLOG_MUTATION)
   const {closeModal} = useModal()
-
   const form = useForm({
-    resolver: zodResolver(SavePostFormSchema),
+    resolver: zodResolver(EditPostFormSchema),
     defaultValues: {
-      title: "",
-      tags: [],
-      isPublished: false
+      title: currentTitle,
+      tags: currentTags.map(tag => ({value: tag.id, label: tag.name})),
+      isPublished: true
     }
   })
 
   const onSubmit = async values => {
     try {
-      const {data} = await createBlog({
+      const {data} = await updateBlog({
         variables: {
+          id: blogId,
           title: values.title,
           content: editorContent,
           tags: values.tags.map(tag => tag.value),
@@ -60,11 +62,11 @@ const SavePostForm = ({editorContent}) => {
         }
       })
 
-      toast.success("Blog post saved successfully")
+      toast.success("Blog post updated successfully")
       closeModal()
       navigate("/posts")
     } catch (error) {
-      console.error("Save error", error)
+      console.error("Update error:", error)
       toast.error(error.message)
     }
   }
@@ -82,9 +84,9 @@ const SavePostForm = ({editorContent}) => {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Enter title"
+                  placeholder="Blog post title"
                   {...field}
-                  className="text-lg"
+                  className="text-lg font-semibold"
                 />
               </FormControl>
               <FormMessage />
@@ -133,7 +135,7 @@ const SavePostForm = ({editorContent}) => {
             className="min-w-[120px]"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Saving..." : "Save"}
+            {form.formState.isSubmitting ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </form>
@@ -141,4 +143,4 @@ const SavePostForm = ({editorContent}) => {
   )
 }
 
-export default SavePostForm
+export default EditPostForm

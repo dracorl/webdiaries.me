@@ -1,30 +1,34 @@
-import Navbar from "./Navbar"
-import Footer from "./Footer"
 import Menu from "./Menu"
-import {Outlet} from "react-router-dom"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetTitle,
+  SheetDescription
+} from "@/components/ui/sheet"
+import {VisuallyHidden} from "@radix-ui/react-visually-hidden"
 
-const Drawer = () => {
+const Drawer = ({isOpen, onOpenChange}) => {
   return (
-    <div className="drawer overflow-x-hidden">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content min-h-screen flex flex-col">
-        {/* Page content here */}
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </div>
-      <div className="drawer-side w-64">
-        <label
-          htmlFor="my-drawer"
-          aria-label="close sidebar"
-          className="drawer-overlay"
-        ></label>
-        <ul className="menu p-4 w-64 min-h-full bg-base-200 text-base-content">
-          {/* Sidebar content here */}
-          <Menu />
-        </ul>
-      </div>
-    </div>
+    <Sheet open={isOpen} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="left"
+        className="w-64 p-0 pt-2"
+        aria-describedby="drawer-description"
+      >
+        <VisuallyHidden>
+          <SheetTitle>Navigation Menu</SheetTitle>
+          <SheetDescription id="drawer-description">
+            Main application navigation links
+          </SheetDescription>
+        </VisuallyHidden>
+
+        <div className="h-full">
+          <Menu open={isOpen} onOpenChange={onOpenChange} />
+        </div>
+      </SheetContent>
+    </Sheet>
   )
 }
+
 export default Drawer

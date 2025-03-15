@@ -2,7 +2,7 @@ import ResetPasswordForm from "../components/forms/ResetPasswordForm"
 
 const ResetPasswordPage = () => {
   return (
-    <div className="flex-1 mt-1">
+    <div className="h-screen flex items-center justify-center">
       <ResetPasswordForm />
     </div>
   )
