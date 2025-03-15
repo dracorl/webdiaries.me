@@ -9,6 +9,9 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Node Js
+        uses: actions/setup-node@v4
+        
       - name: Checkout repository
         uses: actions/checkout@v4
 
