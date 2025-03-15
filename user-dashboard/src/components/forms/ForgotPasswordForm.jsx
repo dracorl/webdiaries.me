@@ -6,8 +6,10 @@ import {Button} from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
@@ -47,6 +49,13 @@ const ForgotPasswordForm = () => {
           name="email"
           render={({field}) => (
             <FormItem>
+              <FormLabel className="text-lg font-semibold">
+                Forgot Password
+              </FormLabel>
+              <FormDescription>
+                Enter your email address and we will send you a link to reset
+                your password.
+              </FormDescription>
               <FormControl>
                 <Input placeholder="Email" {...field} />
               </FormControl>
@@ -54,7 +63,9 @@ const ForgotPasswordForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Send</Button>
+        <Button type="submit" className="float-right">
+          Send
+        </Button>
       </form>
     </Form>
   )

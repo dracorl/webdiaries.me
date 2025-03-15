@@ -9,6 +9,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input"
@@ -53,6 +54,9 @@ const ResetPasswordForm = () => {
           name="password"
           render={({field}) => (
             <FormItem>
+              <FormLabel className="text-lg font-semibold">
+                Change Your Password
+              </FormLabel>
               <FormControl>
                 <Input type="password" placeholder="New Password" {...field} />
               </FormControl>
@@ -76,7 +80,9 @@ const ResetPasswordForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Reset</Button>
+        <Button className="float-end" type="submit">
+          Reset
+        </Button>
       </form>
     </Form>
   )

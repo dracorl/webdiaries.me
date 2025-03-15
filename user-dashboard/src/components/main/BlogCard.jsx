@@ -1,4 +1,4 @@
-const BlogCard = ({ title, description, date, readTime, imageUrl, link }) => {
+const BlogCard = ({title, description, date, readTime, imageUrl, link}) => {
   return (
     <a
       href={link}
@@ -7,7 +7,7 @@ const BlogCard = ({ title, description, date, readTime, imageUrl, link }) => {
       className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer flex flex-col h-full"
     >
       {/* Resim Alanı */}
-      <div className="h-48 bg-gray-100 animate-pulse flex-shrink-0">
+      <div className="h-48 bg-gray-100 flex-shrink-0">
         {imageUrl && (
           <img
             src={imageUrl}
@@ -30,7 +30,7 @@ const BlogCard = ({ title, description, date, readTime, imageUrl, link }) => {
         </div>
       </div>
     </a>
-  );
-};
+  )
+}
 
-export default BlogCard;
+export default BlogCard
