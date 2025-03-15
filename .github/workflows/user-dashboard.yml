@@ -24,8 +24,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
             cd ~/webdiaries.me/user-dashboard
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
             git pull
             npm install
             npm run build
