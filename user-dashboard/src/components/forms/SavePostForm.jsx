@@ -82,9 +82,9 @@ const SavePostForm = ({editorContent}) => {
             <FormItem>
               <FormControl>
                 <Input
-                  placeholder="Başlık giriniz"
+                  placeholder="Enter title"
                   {...field}
-                  className="text-lg font-semibold"
+                  className="text-lg"
                 />
               </FormControl>
               <FormMessage />
@@ -121,7 +121,7 @@ const SavePostForm = ({editorContent}) => {
                 />
               </FormControl>
               <span className="font-medium">
-                {field.value ? "Yayınla" : "Taslak olarak kaydet"}
+                {field.value ? "Publish" : "Save as draft"}
               </span>
             </div>
           )}
@@ -133,7 +133,7 @@ const SavePostForm = ({editorContent}) => {
             className="min-w-[120px]"
             disabled={form.formState.isSubmitting}
           >
-            {form.formState.isSubmitting ? "Kaydediliyor..." : "Kaydet"}
+            {form.formState.isSubmitting ? "Saving..." : "Save"}
           </Button>
         </div>
       </form>
