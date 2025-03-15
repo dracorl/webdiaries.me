@@ -9,9 +9,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Node Js
-        uses: actions/setup-node@v4
-        
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -27,6 +24,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.IP }} << 'EOF'
             cd ~/webdiaries.me/user-dashboard
+            source ~/.bashrc
             git pull
             npm install
             npm run build
