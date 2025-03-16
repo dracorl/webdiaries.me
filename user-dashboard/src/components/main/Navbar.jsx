@@ -14,13 +14,24 @@ const Navbar = ({onDrawerOpen}) => {
   const {openModal} = useModal()
 
   useEffect(() => {
-    const fetchUsername = async () => {
-      const result = await getUsername()
-      setUsername(result)
+    if (loggedIn) {
+      const fetchUsername = async () => {
+        try {
+          const result = await getUsername()
+          setUsername(result)
+          // Eğer username alınamazsa oturumu kapat
+          if (!result) {
+            logout()
+            navigate("/login")
+          }
+        } catch (error) {
+          logout()
+          navigate("/login")
+        }
+      }
+      fetchUsername()
     }
-
-    fetchUsername()
-  }, [getUsername])
+  }, [loggedIn, getUsername, logout, navigate])
 
   const loginAction = () => {
     openModal("Login", "Log in to your account", <LoginForm />)

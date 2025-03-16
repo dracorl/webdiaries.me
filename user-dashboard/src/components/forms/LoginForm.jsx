@@ -47,7 +47,6 @@ const LoginForm = ({onSubmitSuccess}) => {
         response.data.login.refreshToken
       )
       closeModal()
-      console.log("type of onSubmitSuccess", typeof onSubmitSuccess)
       login()
     } catch (error) {
       console.error(error)

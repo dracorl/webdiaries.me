@@ -34,10 +34,21 @@ const isTokenExpired = async token => {
 }
 
 const getUsername = async () => {
-  const {data} = await client.query({
-    query: GET_USERNAME_QUERY
-  })
-  return data.user.username
+  try {
+    const {data} = await client.query({
+      query: GET_USERNAME_QUERY,
+      fetchPolicy: "network-only"
+    })
+    // Kullanıcı objesi null ise veya username yoksa hata fırlat
+    if (!data?.user?.username) {
+      throw new Error("User data not available")
+    }
+    return data.user.username
+  } catch (error) {
+    console.error("Username fetch failed:", error)
+    clearTokens() // Geçersiz token'ları temizle
+    return null
+  }
 }
 
 const saveTokens = (accessToken, refreshToken) => {
