@@ -80,3 +80,11 @@
   animation: aurora 45s linear infinite; /* 60s → 45s */
   animation-play-state: var(--anim-play-state, running);
 }
+
+/* Liste stilleri */
+ul {
+  @apply list-disc pl-4;
+}
+ol {
+  @apply list-decimal pl-4;
+}
