@@ -1,4 +1,3 @@
-import mainLogo from "/icon.svg"
 import {useState, useEffect} from "react"
 import {useNavigate, Link} from "react-router-dom"
 import {useAuth} from "../../contexts/AuthContext"
@@ -51,11 +50,6 @@ const Navbar = ({onDrawerOpen}) => {
             target="_blank"
             className="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity"
           >
-            <img
-              src={mainLogo}
-              className="w-8 h-8 md:w-12 md:h-12 object-contain"
-              alt="Website Logo"
-            />
             <TypeAnimation
               className="text-xs md:text-sm font-mono max-w-[100px] md:max-w-none truncate"
               sequence={[`https://${username}.webdiaries.me`, 1000, "", 1000]}

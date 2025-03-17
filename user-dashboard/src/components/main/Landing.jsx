@@ -19,22 +19,21 @@ const blogs = [
     link: "https://enginyuksel.webdiaries.me/blog/67bf4071923c224bfbf33503"
   },
   {
-    title: "Yapay Zeka ve Yaratıcılık: Sanatın Yeni Yüzü ve Geleceği",
-    description: "Yapay zeka ve sanat üzerine bir yazı dizisi başlıyor...",
+    title: "Best Anytime Baked Chicken Meatballs",
+    description: "These baked chicken meatballs are the BEST!",
     date: "Sep 7, 2024",
     readTime: "7 min read",
     imageUrl:
-      "https://mediatrend.mediamarkt.com.tr/wp-content/uploads/2024/07/Yapay-Zeka-Nereye-Gidiyor.webp",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf431a923c224bfbf33566"
+      "https://pinchofyum.com/cdn-cgi/image/width=680,height=99999,fit=scale-down/wp-content/uploads/Baked-Chicken-Meatballs-with-Sauce.jpg",
+    link: "https://delicious.webdiaries.me/blog/67d77474923c224bfbf34341"
   },
   {
-    title: "Elmalı Kek Tarifi",
-    description: "Bir dilim elmalı kek, yanında sıcacık bir çay...",
+    title: "Tibet Travel Tips: A First-Timer's Guide",
+    description: "Everything you need to know before visiting Tibet",
     date: "Sep 10, 2024",
     readTime: "7 min read",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgTnAnJahD6y399KeOuypkYogZwo_wl6hVPA&s",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf4103923c224bfbf3353f"
+    imageUrl: "https://media.odynovotours.com/article/30000/tibet_27710.jpg",
+    link: "https://travellersguide.webdiaries.me/blog/67d785c9923c224bfbf343af"
   }
 ]
 
