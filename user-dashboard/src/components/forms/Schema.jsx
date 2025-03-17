@@ -48,7 +48,9 @@ const SocialLinksFormSchema = z.object({
 
 const SavePostFormSchema = z.object({
   title: z.string().min(1, "Title must be at least 1 characters"),
-  tags: z.array(z.string()),
+  tags: z
+    .array(z.object({value: z.string(), label: z.string()}))
+    .min(1, "At least one tag is required"),
   isPublished: z.boolean()
 })
 
