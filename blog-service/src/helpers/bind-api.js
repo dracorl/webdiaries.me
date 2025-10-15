@@ -1,5 +1,5 @@
 import axios from "axios"
-import {BIND_API, BIND_API_KEY, SERVER_IP} from "../config/index.js" // Import BIND_API and BIND_API_KEY from config
+import {BIND_API, BIND_API_KEY, SERVER_IP, NODE_ENV} from "../config/index.js" // Import BIND_API and BIND_API_KEY from config
 
 // set axios setttings
 axios.defaults.baseURL = BIND_API
@@ -15,6 +15,7 @@ const body = {
 }
 
 const checkDomain = async domain => {
+  if (NODE_ENV === "development") return false
   try {
     const response = await axios.get(`/${domain}.webdiaries.me`)
     if (Object.keys(response.data).length === 0) return false
@@ -25,6 +26,7 @@ const checkDomain = async domain => {
 }
 
 const createDomain = async domain => {
+  if (NODE_ENV === "development") return true
   try {
     await axios.post(`/${domain}.webdiaries.me`, body)
     return true
@@ -34,6 +36,7 @@ const createDomain = async domain => {
 }
 
 const deleteDomain = async domain => {
+  if (NODE_ENV === "development") return true
   try {
     await axios.delete(`/${domain}.webdiaries.me`, {data: body})
     return true

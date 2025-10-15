@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the frontend code
-RUN npm run build
+# RUN npm run build
 
 # Expose the port that the frontend will run on
 EXPOSE 8000

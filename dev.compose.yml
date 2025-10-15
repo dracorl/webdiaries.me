@@ -1,0 +1,96 @@
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=dev
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - webdiaries-net
+
+  blog-service:
+    build: ./blog-service
+    ports:
+      - "4000:4000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGODB_HOST=mongo
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=webdiaries
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=dev
+      - MONGODB_AUTH_SOURCE=admin
+      - NODE_ENV=development
+      - SERVER_IP=127.0.0.1
+      - YANDEX_USER=test
+      - YANDEX_PASS=test
+      - ACCESS_TOKEN_SECRET=1234
+      - REFRESH_TOKEN_SECRET=1234
+    volumes:
+      - ./blog-service:/app
+    dns: 127.0.0.1
+    networks:
+      - webdiaries-net
+
+  user-dashboard:
+    build: ./user-dashboard
+    command: npm run dev -- --host
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_API=http://api.webdiaries.me
+    volumes:
+      - ./user-dashboard:/app
+      - /app/node_modules
+    dns: 127.0.0.1
+    networks:
+      - webdiaries-net
+
+  frontend:
+    build: ./frontend
+    command: npm run dev -- --host
+    ports:
+      - "5000:5000"
+    environment:
+      - VITE_BACKEND_API=http://api.webdiaries.me
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    dns: 127.0.0.1
+    networks:
+      - webdiaries-net
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/dev.nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - blog-service
+      - user-dashboard
+      - frontend
+    dns: 127.0.0.1
+    networks:
+      - webdiaries-net
+
+  dnsmasq:
+    image: jpillora/dnsmasq:latest
+    container_name: dnsmasq
+    volumes:
+      - ./dnsmasq.conf:/etc/dnsmasq.conf:ro
+    cap_add:
+      - NET_ADMIN
+    network_mode: host
+    restart: unless-stopped
+
+networks:
+  webdiaries-net:
+    driver: bridge
+
+volumes:
+  mongo-data:
