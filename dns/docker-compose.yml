@@ -1,0 +1,49 @@
+networks:
+  dns_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16
+
+services:
+  bind9:
+    image: ubuntu/bind9:latest
+    container_name: bind9
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "953:953/tcp"
+    networks:
+      dns_net:
+        ipv4_address: 172.25.0.10
+    volumes:
+      - ./config/rndc.key:/etc/bind/rndc.key:ro
+      - ./config/named.conf.local:/etc/bind/named.conf.local
+      - ./config/named.conf.options:/etc/bind/named.conf.options
+      - ./config/apikeys.pass:/etc/bind/apikeys.pass:ro
+      - ./zones:/etc/bind/zones:ro
+    restart: unless-stopped
+
+  bindapi:
+    image: jaytuckey/bind-rest-api
+    container_name: bindapi
+    depends_on:
+      - bind9
+    networks:
+      - dns_net
+    ports:
+      - "8000:8000"
+    environment:
+      BIND_SERVER: 172.25.0.10
+      TSIG_USERNAME: ${TSIG_USERNAME}
+      TSIG_PASSWORD: ${TSIG_PASSWORD}
+      TSIG_ALGO: ${TSIG_ALGO}
+      BIND_ALLOWED_ZONES: webdiaries.online
+      API_KEY_FILE: /etc/bind/apikeys.pass
+      LOGGING_APPLICATION_NAME: ${LOGGING_APPLICATION_NAME}
+      LOGGING_DIR: /logs
+    volumes:
+      - ./config/rndc.key:/etc/bind/rndc.key:ro
+      - ./config/apikeys.pass:/etc/bind/apikeys.pass:ro
+      - ./logs:/logs
+    restart: unless-stopped

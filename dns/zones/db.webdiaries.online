@@ -1,0 +1,11 @@
+$TTL    86400
+@       IN      SOA     ns1.webdiaries.online. admin.webdiaries.online. (
+                              2025101601 ; Serial
+                              3600       ; Refresh
+                              1800       ; Retry
+                              604800     ; Expire
+                              86400 )    ; Minimum
+;
+@       IN      NS      ns1.webdiaries.online.
+ns1     IN      A       [IP]
+www     IN      A       [IP]
