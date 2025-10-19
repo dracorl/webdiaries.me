@@ -1,3 +1,13 @@
+# files
+dns/config/apikeys.pass
+dns/config/named.conf.local
+dns/config/rndc.key
+dns/zones/db.webdiaries.online
+nginx/prod.nginx.conf
+nginx/dev.nginx.conf
+nginx/rfc2136.ini
+
+
 #mockdata
 blog-service/mockdata/
 

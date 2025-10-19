@@ -2,12 +2,12 @@ include "/etc/bind/rndc.key";
 
 controls {
     inet 0.0.0.0 port 953
-        allow { 172.25.0.10; } keys { "rndc-key"; };
+        allow { 172.25.0.10; } keys { "${TSIG_USERNAME}"; };
 };
 
 zone "webdiaries.online" {
     type master;
     file "/etc/bind/zones/db.webdiaries.online";
-    allow-transfer { key "rndc-key"; };
-    update-policy { grant rndc.key zonesub any; };
+    allow-transfer { key "${TSIG_USERNAME}"; };
+    update-policy { grant ${TSIG_USERNAME} zonesub any; };
 };

@@ -9,7 +9,7 @@ export default defineConfig({
       usePolling: true
     },
     host: true,
-    port: 5000,
+    port: VITE_FRONTEND_PORT,
     proxy: {
       "/api": {
         target: () => import.meta.env.VITE_BACKEND_API,

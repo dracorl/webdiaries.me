@@ -8,10 +8,10 @@ error_log /var/log/nginx/error.log debug;
 
 server {
     listen 80;
-    server_name webdiaries.me www.webdiaries.me;
+    server_name webdiaries.online www.webdiaries.online;
     
     location / {
-        proxy_pass http://user-dashboard:5173;
+        proxy_pass http://user-dashboard:${VITE_USER_DASHBOARD_PORT};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -23,7 +23,7 @@ server {
         proxy_send_timeout 86400s;
     }
     location ~* ^/(vite|__vite_ping|@vite) {
-        proxy_pass http://user-dashboard:5173;
+        proxy_pass http://user-dashboard:${VITE_USER_DASHBOARD_PORT};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -35,10 +35,10 @@ server {
 
 server {
     listen 80;
-    server_name api.webdiaries.me;
+    server_name api.webdiaries.online;
     
     location / {
-        proxy_pass http://blog-service:4000;
+        proxy_pass http://blog-service:${BLOG_SERVICE_PORT};
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -48,10 +48,10 @@ server {
 
 server {
     listen 80;
-    server_name ~^(?<subdomain>.+)\.webdiaries\.me$;
+    server_name ~^(?<subdomain>.+)\.webdiaries\.online$;
     
     location / {
-        proxy_pass http://frontend:5000;
+        proxy_pass http://frontend:${VITE_FRONTEND_PORT};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -63,7 +63,7 @@ server {
         proxy_send_timeout 86400s;
     }
     location ~* ^/(vite|__vite_ping|@vite) {
-        proxy_pass http://frontend:5000;
+        proxy_pass http://frontend:${VITE_FRONTEND_PORT};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

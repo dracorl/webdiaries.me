@@ -11,7 +11,7 @@ const {
   MONGODB_AUTH_SOURCE
 } = process.env
 
-const {NODE_ENV} = process.env
+const {NODE_ENV, BLOG_SERVICE_PORT} = process.env
 const {BIND_API, BIND_API_KEY, SERVER_IP} = process.env
 const {YANDEX_USER, YANDEX_PASS} = process.env
 const {ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET} = process.env
@@ -26,5 +26,6 @@ export {
   SERVER_IP,
   YANDEX_USER,
   YANDEX_PASS,
-  NODE_ENV
+  NODE_ENV,
+  BLOG_SERVICE_PORT
 }

@@ -1,0 +1,80 @@
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+}
+
+error_log /var/log/nginx/error.log warn;
+
+server {
+    listen 80;
+    server_name webdiaries.online www.webdiaries.online api.webdiaries.online bind-api.webdiaries.online *.webdiaries.online;
+
+    # Serve ACME challenge files for Certbot
+    location /.well-known/acme-challenge/ {
+        root /etc/letsencrypt/webroot;
+        try_files $uri $uri/ =404;
+    }
+
+    # Redirect all other HTTP traffic to HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name webdiaries.online www.webdiaries.online;
+
+    ssl_certificate /etc/letsencrypt/live/webdiaries.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webdiaries.online/privkey.pem;
+
+    location / {
+        root /usr/share/nginx/html/user-dashboard;
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name api.webdiaries.online;
+
+    ssl_certificate /etc/letsencrypt/live/webdiaries.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webdiaries.online/privkey.pem;
+
+    location / {
+        proxy_pass http://blog-service:${BLOG_SERVICE_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name bind-api.webdiaries.online;
+
+    ssl_certificate /etc/letsencrypt/live/webdiaries.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webdiaries.online/privkey.pem;
+
+    location / {
+        proxy_pass http://${BIND_API_IP}:${BIND_API_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ~^(?<subdomain>.+)\.webdiaries\.online$;
+
+    ssl_certificate /etc/letsencrypt/live/webdiaries.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/webdiaries.online/privkey.pem;
+
+    location / {
+        root /usr/share/nginx/html/frontend;
+        try_files $uri $uri/ /index.html;
+    }
+}

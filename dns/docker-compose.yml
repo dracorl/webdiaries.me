@@ -32,7 +32,7 @@ services:
     networks:
       - dns_net
     ports:
-      - "8000:8000"
+      - "${BIND_API_PORT}:${BIND_API_PORT}"
     environment:
       BIND_SERVER: 172.25.0.10
       TSIG_USERNAME: ${TSIG_USERNAME}
@@ -40,7 +40,7 @@ services:
       TSIG_ALGO: ${TSIG_ALGO}
       BIND_ALLOWED_ZONES: webdiaries.online
       API_KEY_FILE: /etc/bind/apikeys.pass
-      LOGGING_APPLICATION_NAME: ${LOGGING_APPLICATION_NAME}
+      LOGGING_APPLICATION_NAME: bind-api-dev
       LOGGING_DIR: /logs
     volumes:
       - ./config/rndc.key:/etc/bind/rndc.key:ro

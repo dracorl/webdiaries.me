@@ -1,5 +1,5 @@
 # Use a base image with Node.js installed
-FROM node:20.12.0-alpine
+FROM node:23-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -13,11 +13,9 @@ RUN npm install
 # Copy the rest of the project files to the working directory
 COPY . .
 
-# Build the frontend code
-# RUN npm run build
+# Expose the port (default to 5173, configurable via ARG)
+ARG PORT=5173
+EXPOSE $PORT
 
-# Expose the port that the frontend will run on
-EXPOSE 8000
-
-# Start the frontend server
-CMD ["npm", "run", "serve"]
+# Start the application based on NODE_ENV
+CMD ["sh", "-c", "if [ \"$NODE_ENV\" = \"production\" ]; then npm run build; else npm run dev -- --host; fi"]

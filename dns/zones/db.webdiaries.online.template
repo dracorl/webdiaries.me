@@ -7,5 +7,6 @@ $TTL    86400
                               86400 )    ; Minimum
 ;
 @       IN      NS      ns1.webdiaries.online.
-ns1     IN      A       [IP]
-www     IN      A       [IP]
+ns1     IN      A       ${DNS_NS1}
+www     IN      A       ${DNS_WWW}
+@       IN      A       ${DNS_ROOT}

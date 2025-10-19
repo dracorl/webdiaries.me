@@ -8,7 +8,7 @@ export default ({mode}) => {
     plugins: [react()],
     server: {
       host: "0.0.0.0",
-      port: 5173,
+      port: import.meta.env.VITE_USER_DASHBOARD_PORT,
       proxy: {
         "/graphql": {
           target: () => import.meta.env.VITE_BACKEND_API,
