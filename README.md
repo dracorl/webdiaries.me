@@ -1,11 +1,5 @@
-### NOTES
+### olası problemler
 
 sudo chown -R 100:100 ./zones // bind9 için dizin erişim izni
 
-./dns/config/apikeys.pass.template
-./dns/config/named.conf.local.template
-./dns/config/rndc.key.template
-./dns/zones/db.webdiaries.online.template
-
-./nginx/prod.nginx.conf.template
-./nginx/rfc2136.ini.template
+53. port veya varsayılan dns programı çakışabilir o durumda çakışan programları kapatıp ilk olarak dnsmaq çalıştırılabilir

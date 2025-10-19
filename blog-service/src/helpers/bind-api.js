@@ -17,7 +17,7 @@ const body = {
 const checkDomain = async domain => {
   if (NODE_ENV === "development") return false
   try {
-    const response = await axios.get(`/${domain}.webdiaries.me`)
+    const response = await axios.get(`/${domain}.webdiaries.online`)
     if (Object.keys(response.data).length === 0) return false
     return true
   } catch (error) {
@@ -28,7 +28,7 @@ const checkDomain = async domain => {
 const createDomain = async domain => {
   if (NODE_ENV === "development") return true
   try {
-    await axios.post(`/${domain}.webdiaries.me`, body)
+    await axios.post(`/${domain}.webdiaries.online`, body)
     return true
   } catch (error) {
     throw new Error(error.response.data)
@@ -38,7 +38,7 @@ const createDomain = async domain => {
 const deleteDomain = async domain => {
   if (NODE_ENV === "development") return true
   try {
-    await axios.delete(`/${domain}.webdiaries.me`, {data: body})
+    await axios.delete(`/${domain}.webdiaries.online`, {data: body})
     return true
   } catch (error) {
     throw new Error(JSON.stringify(error.response.data))

@@ -16,7 +16,7 @@ const blogs = [
     readTime: "5 min read",
     imageUrl:
       "https://upload.wikimedia.org/wikipedia/commons/9/9d/Commodore-64-Computer-FL.png",
-    link: "https://enginyuksel.webdiaries.me/blog/67bf4071923c224bfbf33503"
+    link: "https://enginyuksel.webdiaries.online/blog/67bf4071923c224bfbf33503"
   },
   {
     title: "Best Anytime Baked Chicken Meatballs",
@@ -25,7 +25,7 @@ const blogs = [
     readTime: "7 min read",
     imageUrl:
       "https://pinchofyum.com/cdn-cgi/image/width=680,height=99999,fit=scale-down/wp-content/uploads/Baked-Chicken-Meatballs-with-Sauce.jpg",
-    link: "https://delicious.webdiaries.me/blog/67d77474923c224bfbf34341"
+    link: "https://delicious.webdiaries.online/blog/67d77474923c224bfbf34341"
   },
   {
     title: "Tibet Travel Tips: A First-Timer's Guide",
@@ -33,7 +33,7 @@ const blogs = [
     date: "Sep 10, 2024",
     readTime: "7 min read",
     imageUrl: "https://media.odynovotours.com/article/30000/tibet_27710.jpg",
-    link: "https://travellersguide.webdiaries.me/blog/67d785c9923c224bfbf343af"
+    link: "https://travellersguide.webdiaries.online/blog/67d785c9923c224bfbf343af"
   }
 ]
 

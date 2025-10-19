@@ -1,10 +1,7 @@
 // seed.js
 import {faker} from "@faker-js/faker"
 import {hashPassword} from "./helpers/hashing.js"
-
 import {mongoClient} from "./db.js"
-
-// Schemas
 import {Blog, User, Tag} from "./database/models/index.js"
 
 async function seed() {
@@ -14,6 +11,7 @@ async function seed() {
     console.log("Database already seeded. Skipping...")
     return
   }
+
   await User.deleteMany({})
   await Tag.deleteMany({})
   await Blog.deleteMany({})
@@ -24,12 +22,15 @@ async function seed() {
     email: "test@example.com"
   })
 
-  const tags = []
-  for (let i = 0; i < 30; i++) {
-    tags.push({name: faker.music.genre()})
+  // Generate unique tag names
+  const tagNames = new Set()
+  while (tagNames.size < 30) {
+    tagNames.add(faker.music.genre())
   }
-  const createdTags = await Tag.insertMany(tags)
-  console.log("30 tags created", createdTags)
+  const tags = Array.from(tagNames).map(name => ({name}))
+
+  const createdTags = await Tag.insertMany(tags, {ordered: false})
+  console.log(`${createdTags.length} tags created`, createdTags)
 
   const blogs = []
   for (let i = 0; i < 100; i++) {
@@ -47,7 +48,6 @@ async function seed() {
         from: "2020-01-01T00:00:00.000Z",
         to: new Date()
       }),
-
       updatedAt: new Date()
     })
   }

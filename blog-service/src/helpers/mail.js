@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 })
 
 const mailTemplate = (email, token) => {
-  const url = `https://webdiaries.me/reset-password/${token}`
+  const url = `https://webdiaries.online/reset-password/${token}`
   return {
     from: YANDEX_USER,
     to: email,

@@ -86,7 +86,7 @@ const SignUpForm = () => {
                 <Input placeholder="Username" {...field} />
               </FormControl>
               <FormDescription>
-                Your Webdiaries domain will be: {field.value}.webdiaries.me
+                Your Webdiaries domain will be: {field.value}.webdiaries.online
               </FormDescription>
               <FormMessage />
             </FormItem>

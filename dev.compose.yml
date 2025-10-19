@@ -12,9 +12,11 @@ services:
       - webdiaries-net
 
   blog-service:
-    build: ./blog-service
+    build:
+      context: ./blog-service
+      target: development
     ports:
-      - "${MONGODB_HOST}:${MONGODB_HOST}"
+      - "${BLOG_SERVICE_PORT}:${BLOG_SERVICE_PORT}"
     depends_on:
       - mongo
     environment:
@@ -24,6 +26,7 @@ services:
       - MONGODB_USER=${MONGODB_USER}
       - MONGODB_PASSWORD=${MONGODB_PASSWORD}
       - MONGODB_AUTH_SOURCE=${MONGODB_AUTH_SOURCE}
+      - BLOG_SERVICE_PORT=${BLOG_SERVICE_PORT}
       - NODE_ENV=development
       - SERVER_IP=127.0.0.1
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
@@ -35,12 +38,15 @@ services:
       - webdiaries-net
 
   user-dashboard:
-    build: ./user-dashboard
-    command: npm run dev -- --host
+    build:
+      context: ./user-dashboard
+      target: development
     ports:
       - "${VITE_USER_DASHBOARD_PORT}:${VITE_USER_DASHBOARD_PORT}"
     environment:
       - VITE_BACKEND_API=${VITE_BACKEND_API}
+      - VITE_USER_DASHBOARD_PORT=${VITE_USER_DASHBOARD_PORT}
+      - NODE_ENV=development
     volumes:
       - ./user-dashboard:/app
       - /app/node_modules
@@ -49,12 +55,15 @@ services:
       - webdiaries-net
 
   frontend:
-    build: ./frontend
-    command: npm run dev -- --host
+    build:
+      context: ./frontend
+      target: development
     ports:
       - "${VITE_FRONTEND_PORT}:${VITE_FRONTEND_PORT}"
     environment:
       - VITE_BACKEND_API=${VITE_BACKEND_API}
+      - VITE_FRONTEND_PORT=${VITE_FRONTEND_PORT}
+      - NODE_ENV=development
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -73,6 +82,7 @@ services:
       - user-dashboard
       - frontend
     dns: 127.0.0.1
+    restart: unless-stopped
     networks:
       - webdiaries-net
 

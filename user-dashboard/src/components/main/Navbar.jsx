@@ -46,13 +46,18 @@ const Navbar = ({onDrawerOpen}) => {
       <div className="flex items-center gap-2 md:gap-4 flex-1">
         {loggedIn && username && (
           <Link
-            to={`https://${username}.webdiaries.me`}
+            to={`https://${username}.webdiaries.online`}
             target="_blank"
             className="flex items-center gap-1 md:gap-2 hover:opacity-80 transition-opacity"
           >
             <TypeAnimation
               className="text-xs md:text-sm font-mono max-w-[100px] md:max-w-none truncate"
-              sequence={[`https://${username}.webdiaries.me`, 1000, "", 1000]}
+              sequence={[
+                `https://${username}.webdiaries.online`,
+                1000,
+                "",
+                1000
+              ]}
               speed={50}
               repeat={Infinity}
             />

@@ -11,11 +11,14 @@ templates=(
   "./nginx/dev.nginx.conf.template"
 )
 
+# Mevcut ortam değişkenlerinden sadece ${VAR} formatında değiştirilecekleri hazırla
+vars=$(env | awk -F= '{printf " ${%s}", $1}')
+
 # Her template dosyasını işleyip .template uzantısını kaldırarak çıktı oluştur
 for file in "${templates[@]}"; do
   output="${file%.template}"
   echo "Generating: $output"
-  envsubst < "$file" > "$output"
+  envsubst "$vars" < "$file" > "$output"
 done
 
 echo "✅ All config files generated successfully."
