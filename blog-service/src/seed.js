@@ -18,7 +18,7 @@ async function seed() {
 
   const user = await User.create({
     username: "test",
-    password: await hashPassword("test"),
+    password: await hashPassword("testtest"),
     email: "test@example.com"
   })
 

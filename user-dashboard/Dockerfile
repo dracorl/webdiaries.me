@@ -6,10 +6,10 @@ RUN npm install
 COPY . .
 CMD ["npm", "run", "dev", "--", "--host"]
 
-# Build stage
+# production stage
 FROM node:23-alpine AS production
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+CMD ["sh", "-c", "npm run build"]
