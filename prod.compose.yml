@@ -6,6 +6,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD}
     volumes:
       - mongo-data:/data/db
+    restart: unless-stopped
     networks:
       - webdiaries-net
 
@@ -31,6 +32,7 @@ services:
       - SERVER_IP=${SERVER_IP}
       - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
       - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+    restart: unless-stopped
     networks:
       - webdiaries-net
 
@@ -74,6 +76,7 @@ services:
       - user-dashboard
       - frontend
       - certbot
+    restart: unless-stopped
     networks:
       - webdiaries-net
 
