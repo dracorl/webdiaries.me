@@ -21,18 +21,21 @@ const MainLayout = () => {
     <ModalProvider>
       <ToastContainer />
       <Drawer isOpen={isDrawerOpen} onOpenChange={handleDrawerOpenChange} />
-      <Navbar onDrawerOpen={() => setDrawerOpen(true)} />
 
       {!loggedIn ? (
         <AuroraBackground>
+          <Navbar onDrawerOpen={() => setDrawerOpen(true)} />
           <div className="flex-1 p-4 drop-shadow-lg">
             <Outlet />
           </div>
         </AuroraBackground>
       ) : (
-        <div className="flex-1 p-4 drop-shadow-lg">
-          <Outlet />
-        </div>
+        <>
+          <Navbar onDrawerOpen={() => setDrawerOpen(true)} />
+          <div className="flex-1 p-4 drop-shadow-lg">
+            <Outlet />
+          </div>
+        </>
       )}
 
       <Footer />

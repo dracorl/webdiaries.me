@@ -26,7 +26,9 @@ export default {
         3: "3"
       },
       fontFamily: {
-        sans: ["JetBrains Mono", "sans-serif"]
+        sans: ["JetBrains Mono", "sans-serif"],
+        dancing: ["'Dancing Script'", "cursive"],
+        vibes: ["'Great Vibes'", "cursive"]
       },
       borderRadius: {
         lg: "var(--radius)",

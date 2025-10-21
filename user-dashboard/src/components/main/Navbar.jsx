@@ -42,7 +42,7 @@ const Navbar = ({onDrawerOpen}) => {
   }
 
   return (
-    <header className="shadow-md flex items-center justify-between w-full h-16 px-4 bg-background border-b">
+    <header className="bg-gray-200/30 shadow-md flex items-center justify-between w-full h-16 px-4 border-b">
       <div className="flex items-center gap-2 md:gap-4 flex-1">
         {loggedIn && username && (
           <Link
@@ -65,7 +65,20 @@ const Navbar = ({onDrawerOpen}) => {
         )}
         {!loggedIn && (
           <TypeAnimation
-            sequence={["write to live", 1000, "live to write", 1000]}
+            sequence={[
+              "Ideas deserve to be heard",
+              1000,
+              "Write what you feel",
+              1000,
+              "Your voice. Your story.",
+              1000,
+              "Thoughts that connect us",
+              1000,
+              "Words shape the world",
+              1000,
+              "Speak through your stories",
+              1000
+            ]}
             speed={50}
             repeat={Infinity}
             className="text-xs md:text-sm font-mono"
@@ -105,7 +118,7 @@ const Navbar = ({onDrawerOpen}) => {
           <Button
             variant="ghost"
             onClick={loginAction}
-            className="font-mono text-xs px-2 md:px-4"
+            className="font-mono text-xs px-2 md:px-4 z-50"
           >
             LOG IN
           </Button>

@@ -81,10 +81,39 @@
   animation-play-state: var(--anim-play-state, running);
 }
 
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientMove 4s ease-in-out infinite alternate;
+}
+
 /* Liste stilleri */
 ul {
   @apply list-disc pl-4;
 }
 ol {
   @apply list-decimal pl-4;
+}
+
+@keyframes moveDynamicAurora {
+  0% {
+    transform: translateX(-10%) rotate(0deg);
+    background-position: 0% 50%;
+  }
+  50% {
+    transform: translateX(10%) rotate(10deg);
+    background-position: 100% 50%;
+  }
+  100% {
+    transform: translateX(-10%) rotate(0deg);
+    background-position: 0% 50%;
+  }
 }

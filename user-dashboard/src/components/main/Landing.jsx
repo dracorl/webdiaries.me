@@ -1,5 +1,5 @@
 import {Button} from "@/components/ui/button"
-import {motion} from "framer-motion"
+import {motion, useAnimation} from "framer-motion"
 import BlogCard from "./BlogCard"
 import {useModal} from "../../contexts/ModalContext"
 import SignUpForm from "../forms/SignUpForm"
@@ -60,8 +60,10 @@ export default function Landing() {
             transition={{duration: 0.8}}
           >
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Share Your Thoughts
-              <span className="text-blue-600 block mt-2">Freely</span>
+              <span className="font-sans">Share Your Thoughts</span>
+              <span className="font-vibes text-blue-600 block mt-2">
+                Freely
+              </span>
             </h1>
           </motion.div>
 
@@ -89,7 +91,7 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section className="bg-gray-50 py-16 md:py-24">
+      <section className="bg-gray-200 py-16 md:py-24">
         <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8">
           <FeatureCard
             icon={<PenSVG className="w-12 h-12" />}
@@ -124,25 +126,81 @@ export default function Landing() {
   )
 }
 
-// SVG Components
-const WritingHandSVG = ({className}) => (
-  <svg
-    viewBox="0 0 24 24"
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-  >
-    <motion.path
-      d="M12 19.5V12M9 17L3 11L10 3L15 5.5M21 11L15 5.5M15 5.5L12 8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      initial={{pathLength: 0}}
-      animate={{pathLength: 1}}
-      transition={{duration: 2, repeat: Infinity}}
-    />
-  </svg>
-)
+const WritingHandSVG = ({className}) => {
+  const controls = useAnimation()
+
+  useEffect(() => {
+    const sequence = async () => {
+      while (true) {
+        // çizgiyi oluştur
+        await controls.start({
+          pathLength: 1,
+          opacity: 1,
+          transition: {duration: 3, ease: "easeInOut"}
+        })
+        // kısa bekle
+        await new Promise(r => setTimeout(r, 800))
+        // çizgiyi çöz
+        await controls.start({
+          pathLength: 0,
+          opacity: 0,
+          transition: {duration: 1.2, ease: "easeInOut"}
+        })
+        await new Promise(r => setTimeout(r, 1000))
+      }
+    }
+    sequence()
+  }, [controls])
+
+  return (
+    <svg
+      viewBox="0 0 200 100"
+      className={className}
+      fill="none"
+      strokeWidth="2"
+    >
+      <defs>
+        <linearGradient id="flowGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#6366f1" />
+          <stop offset="50%" stopColor="#a855f7" />
+          <stop offset="100%" stopColor="#ec4899" />
+        </linearGradient>
+      </defs>
+
+      {/* dalgalı çizgi */}
+      <motion.path
+        d="M10 60 Q40 30 70 60 T130 60 T190 40"
+        stroke="url(#flowGradient)"
+        strokeLinecap="round"
+        animate={controls}
+        initial={{pathLength: 0, opacity: 0}}
+      />
+
+      {/* fikir noktaları */}
+      {[...Array(4)].map((_, i) => (
+        <motion.circle
+          key={i}
+          cx={60 + i * 30}
+          cy={40 - i * 5}
+          r="2"
+          fill="url(#flowGradient)"
+          initial={{opacity: 0, scale: 0, y: 10}}
+          animate={{
+            opacity: [0, 1, 0],
+            scale: [0, 1, 1.2],
+            y: [-10, -20 - i * 5]
+          }}
+          transition={{
+            duration: 2,
+            delay: 1 + i * 0.3,
+            repeat: Infinity,
+            repeatDelay: 2.5
+          }}
+        />
+      ))}
+    </svg>
+  )
+}
 
 const PenSVG = ({className}) => (
   <svg
@@ -196,7 +254,7 @@ const AnalyticsSVG = ({className}) => (
 const FeatureCard = ({icon, title, description}) => (
   <motion.div
     whileHover={{scale: 1.05}}
-    className="bg-white/30 backdrop-blur-md p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-white/20"
+    className="bg-white/50 backdrop-blur-md p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow border border-white/20"
   >
     <div className="text-blue-600 mb-4">{icon}</div>
     <h3 className="text-xl font-semibold mb-2">{title}</h3>

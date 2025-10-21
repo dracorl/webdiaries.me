@@ -3,15 +3,11 @@ import {FaGithub, FaTwitter, FaInstagram, FaHeart} from "react-icons/fa"
 
 const Footer = () => {
   return (
-    <footer className="shadow-[0_-5px_10px_rgba(0,0,0,0.2)] footer p-10 bg-secondary text-neutral-content flex justify-between ">
-      <nav>
-        <div className="text-center">
-          Made with <FaHeart className="lg:ml-1 inline text-red-600" />
-        </div>
-      </nav>
+    <footer className="shadow-[0_-5px_10px_rgba(0,0,0,0.2)] footer p-10 bg-gray-200 text-neutral-content flex justify-between ">
+      <nav></nav>
       <nav className="gap-10 flex justify-between text-center">
         <Link
-          to="https://github.com/dracorlll"
+          to="https://x.com/dracorllll"
           target="_blank"
           className="link link-hover"
         >
@@ -27,7 +23,7 @@ const Footer = () => {
           Instagram
         </Link>
         <Link
-          to="https://github.com/dracorlll"
+          to="https://github.com/dracorl"
           target="_blank"
           className="link link-hover"
         >
