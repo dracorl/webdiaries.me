@@ -105,7 +105,7 @@ const DataTableWithPagination = () => {
             Edit
           </Button>
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => {
               setId(row.id)
