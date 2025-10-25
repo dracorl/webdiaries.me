@@ -42,7 +42,7 @@ const SocialLinksForm = () => {
   const form = useForm({
     resolver: zodResolver(SocialLinksFormSchema),
     defaultValues: {
-      links: [{name: "", url: ""}]
+      links: []
     }
   })
 
