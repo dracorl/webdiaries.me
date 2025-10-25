@@ -1,8 +1,7 @@
 import Loading from "./Loading"
-import {useEffect, useCallback, useState} from "react"
-import {useQuery, gql, NetworkStatus} from "@apollo/client"
-import {Link} from "react-router-dom"
-import {useParams} from "react-router-dom"
+import {useEffect, useRef, useState, useCallback} from "react"
+import {useQuery, gql} from "@apollo/client"
+import {Link, useParams} from "react-router-dom"
 import {useDomain} from "../contexts/DomainContext"
 import BackButton from "./BackButton"
 
@@ -38,9 +37,11 @@ const GET_BLOGS = gql`
 const BlogScroll = () => {
   const domainId = useDomain()
   const {id} = useParams()
+  const loaderRef = useRef(null)
   const [hasMore, setHasMore] = useState(true)
   const [isFetchingMore, setIsFetchingMore] = useState(false)
-  const {data, loading, fetchMore, networkStatus} = useQuery(GET_BLOGS, {
+
+  const {data, loading, fetchMore, previousData} = useQuery(GET_BLOGS, {
     variables: {
       offset: 0,
       limit: 10,
@@ -51,51 +52,67 @@ const BlogScroll = () => {
     notifyOnNetworkStatusChange: true
   })
 
-  const handleScroll = useCallback(() => {
-    if (
-      Math.round(window.innerHeight + document.documentElement.scrollTop) >=
-        document.documentElement.offsetHeight - 50 &&
-      !isFetchingMore &&
-      networkStatus !== NetworkStatus.fetchMore &&
-      hasMore
-    ) {
-      setIsFetchingMore(true)
-      fetchMore({
-        variables: {
-          offset: data.blogs.blog.length,
-          limit: 10,
-          author: domainId,
-          tagId: id ? id : null,
-          published: true
-        },
-        updateQuery: (prev, {fetchMoreResult}) => {
-          setIsFetchingMore(false)
-          if (!fetchMoreResult || fetchMoreResult.blogs.blog.length < 10) {
-            setHasMore(false)
-            return prev
-          }
-          return {
-            ...prev,
-            blogs: {
-              ...prev.blogs,
-              blog: [...prev.blogs.blog, ...fetchMoreResult.blogs.blog]
-            }
+  const blogs = data?.blogs?.blog || previousData?.blogs?.blog || []
+
+  useEffect(() => {
+    const savedScrollY = sessionStorage.getItem("scrollY")
+    if (savedScrollY) {
+      window.scrollTo(0, parseInt(savedScrollY))
+    }
+    return () => {
+      sessionStorage.setItem("scrollY", window.scrollY)
+    }
+  }, [])
+
+  const loadMore = useCallback(() => {
+    if (isFetchingMore || !hasMore) return
+    setIsFetchingMore(true)
+    fetchMore({
+      variables: {
+        offset: blogs.length,
+        limit: 10,
+        author: domainId,
+        tagId: id ? id : null,
+        published: true
+      },
+      updateQuery: (prev, {fetchMoreResult}) => {
+        setIsFetchingMore(false)
+        if (!fetchMoreResult || fetchMoreResult.blogs.blog.length < 10) {
+          setHasMore(false)
+          return prev
+        }
+        return {
+          ...prev,
+          blogs: {
+            ...prev.blogs,
+            blog: [...prev.blogs.blog, ...fetchMoreResult.blogs.blog]
           }
         }
-      })
-    }
-  }, [data, fetchMore, isFetchingMore, networkStatus, id, hasMore, domainId])
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [handleScroll])
+      }
+    })
+  }, [fetchMore, blogs.length, id, domainId, hasMore, isFetchingMore])
 
-  if (loading || !domainId) return <Loading />
+  useEffect(() => {
+    if (!loaderRef.current) return
+    const observer = new IntersectionObserver(
+      entries => {
+        const [entry] = entries
+        if (entry.isIntersecting) {
+          loadMore()
+        }
+      },
+      {threshold: 1.0}
+    )
+    observer.observe(loaderRef.current)
+    return () => observer.disconnect()
+  }, [loadMore])
+
+  if (loading && blogs.length === 0) return <Loading />
 
   return (
     <>
       {window.history.length > 2 && id && <BackButton />}
-      {data.blogs.blog.map(blog => (
+      {blogs.map(blog => (
         <div className="p-3 mb-9 shadow-md" key={blog.id}>
           <div className="flex flex-col">
             <div className="italic self-end">
@@ -110,6 +127,7 @@ const BlogScroll = () => {
             <div className="text-base-content text-base md:text-xl font-bold mb-4">
               {blog.title}
             </div>
+
             <div
               className="text-base-content prose dark:prose-invert prose-sm sm:prose-base lg:prose-sm xl:prose-base m-5 focus:outline-none"
               dangerouslySetInnerHTML={{
@@ -119,6 +137,7 @@ const BlogScroll = () => {
                     : blog.content
               }}
             />
+
             <div className="mt-5 self-end">
               <Link to={`/blog/${blog.id}`}>
                 <button className="bg-neutral text-neutral-content btn btn-outline btn-xs">
@@ -126,6 +145,7 @@ const BlogScroll = () => {
                 </button>
               </Link>
             </div>
+
             <div className="mt-5">
               {blog.tags.map(tag => (
                 <Link key={tag.id + blog.id} to={`/tag/${tag.id}`}>
@@ -138,8 +158,15 @@ const BlogScroll = () => {
           </div>
         </div>
       ))}
-      {isFetchingMore && hasMore && <Loading />}
-      {!hasMore && <div className="text-center">No more blogs to show.</div>}
+
+      {hasMore && <div ref={loaderRef} style={{height: 50}} />}
+
+      {isFetchingMore && <Loading />}
+      {!hasMore && (
+        <div className="text-center mt-5 text-sm opacity-70">
+          No more blogs to show.
+        </div>
+      )}
     </>
   )
 }
